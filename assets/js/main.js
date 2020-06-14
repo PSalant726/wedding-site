@@ -90,13 +90,13 @@
 		var settings = {
 				// Images (in the format of 'url': 'alignment', where alignment can be `top`, `center`, or `bottom`).
 				images: {
-					'assets/images/1.png': 'center',
-					'assets/images/2.png': 'center',
-					'assets/images/3.png': 'center',
-					'assets/images/4.png': 'center',
-					'assets/images/5.png': 'center',
-					'assets/images/7.png': 'center',
-					'assets/images/8.png': 'center'
+					'https://live.staticflickr.com/65535/50006746732_12cf6807a6_k.jpg': 'center',
+					'https://live.staticflickr.com/65535/50006490316_b7f86e8ad0_h.jpg': 'center',
+					'https://live.staticflickr.com/65535/50006489981_8502d3f041_k.jpg': 'center',
+					'https://live.staticflickr.com/65535/50006745282_438e4d9972_k.jpg': 'center',
+					'https://live.staticflickr.com/65535/50005961378_8372386b75_k.jpg': 'center',
+					'https://live.staticflickr.com/65535/50005960863_58f1e4efc7_k.jpg': 'center',
+					'https://live.staticflickr.com/65535/50006744447_5b677427e7_h.jpg': 'center'
 				},
 
 				// Delay.
