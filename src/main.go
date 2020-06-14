@@ -8,6 +8,16 @@ import (
 	"text/template"
 )
 
+var (
+	templateFiles = []string{
+		// "./templates/about.html",
+		// "./templates/accommodations.html",
+		"./templates/preview.html",
+		// "./templates/rsvp.html",
+	}
+	templates = template.Must(template.ParseFiles(templateFiles...))
+)
+
 func main() {
 	http.HandleFunc("/", previewHandler)
 	// http.HandleFunc("/", aboutHandler)
@@ -28,25 +38,38 @@ func main() {
 }
 
 func previewHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("./templates/preview.html")
-
-	err := t.Execute(w, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if err := renderTemplate(w, "preview"); err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
 	}
 }
 
 // func aboutHandler(w http.ResponseWriter, r *http.Request) {
-// 	t, _ := template.ParseFiles("./templates/about.html")
-// 	t.Execute(w, nil)
+// 	if err := renderTemplate(w, "about"); err != nil {
+// 		redirectHome(w, r)
+// 	}
 // }
 
 // func accommodationsHandler(w http.ResponseWriter, r *http.Request) {
-// 	t, _ := template.ParseFiles("./templates/accommodations.html")
-// 	t.Execute(w, nil)
+// 	if err := renderTemplate(w, "accommodations"); err != nil {
+// 		redirectHome(w, r)
+// 	}
 // }
 
 // func rsvpHandler(w http.ResponseWriter, r *http.Request) {
-// 	t, _ := template.ParseFiles("./templates/rsvp.html")
-// 	t.Execute(w, nil)
+// 	if err := renderTemplate(w, "rsvp"); err != nil {
+// 		redirectHome(w, r)
+// 	}
+// }
+
+func renderTemplate(w http.ResponseWriter, tmpl string) error {
+	templateFile := fmt.Sprintf("%s.html", tmpl)
+	if err := templates.ExecuteTemplate(w, templateFile, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// func redirectHome(w http.ResponseWriter, r *http.Request) {
+// 	http.Redirect(w, r, "/", http.StatusFound)
 // }
