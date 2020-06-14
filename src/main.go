@@ -27,14 +27,18 @@ func main() {
 	fs := http.FileServer(http.Dir("assets/"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
+	startServer()
+}
+
+func startServer() {
 	port, ok := os.LookupEnv("PORT") // for heroku
 	if ok {
 		port = fmt.Sprint(":", port)
-		log.Fatal(http.ListenAndServe(port, nil))
-		return
+	} else {
+		port = ":8080"
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(port, nil))
 }
 
 func previewHandler(w http.ResponseWriter, r *http.Request) {
