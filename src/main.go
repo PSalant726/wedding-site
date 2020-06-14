@@ -1,28 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
-	"os"
 	"text/template"
 )
 
-var (
-	templateFiles = []string{
-		// "./templates/about.html",
-		// "./templates/accommodations.html",
-		"./templates/preview.html",
-		// "./templates/rsvp.html",
-	}
-	templates = template.Must(template.ParseFiles(templateFiles...))
+const (
+	// ABOUT_PATH          = "/about"
+	// ACCOMMODATIONS_PATH = "/accommodations"
+	PREVIEW_PATH = "/preview"
+	// RSVP_PATH           = "/rsvp"
 )
+
+var templates = template.Must(template.ParseFiles(getTemplateFiles()...))
 
 func main() {
 	http.HandleFunc("/", previewHandler)
-	// http.HandleFunc("/", aboutHandler)
-	// http.HandleFunc("/accommodations", accommodationsHandler)
-	// http.HandleFunc("/rsvp", rsvpHandler)
+	// http.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
+	// http.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
+	// http.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
 
 	fs := http.FileServer(http.Dir("assets/"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -30,50 +26,16 @@ func main() {
 	startServer()
 }
 
-func startServer() {
-	port, ok := os.LookupEnv("PORT") // for heroku
-	if ok {
-		port = fmt.Sprint(":", port)
-	} else {
-		port = ":8080"
-	}
-
-	log.Fatal(http.ListenAndServe(port, nil))
-}
-
 func previewHandler(w http.ResponseWriter, r *http.Request) {
-	if err := renderTemplate(w, "preview"); err != nil {
+	if err := renderTemplate(w, PREVIEW_PATH); err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 	}
 }
 
-// func aboutHandler(w http.ResponseWriter, r *http.Request) {
-// 	if err := renderTemplate(w, "about"); err != nil {
-// 		redirectHome(w, r)
+// func makeHandler(path string) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		if err := renderTemplate(w, path); err != nil {
+// 			http.Redirect(w, r, "/", http.StatusFound)
+// 		}
 // 	}
-// }
-
-// func accommodationsHandler(w http.ResponseWriter, r *http.Request) {
-// 	if err := renderTemplate(w, "accommodations"); err != nil {
-// 		redirectHome(w, r)
-// 	}
-// }
-
-// func rsvpHandler(w http.ResponseWriter, r *http.Request) {
-// 	if err := renderTemplate(w, "rsvp"); err != nil {
-// 		redirectHome(w, r)
-// 	}
-// }
-
-func renderTemplate(w http.ResponseWriter, tmpl string) error {
-	templateFile := fmt.Sprintf("%s.html", tmpl)
-	if err := templates.ExecuteTemplate(w, templateFile, nil); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// func redirectHome(w http.ResponseWriter, r *http.Request) {
-// 	http.Redirect(w, r, "/", http.StatusFound)
 // }
