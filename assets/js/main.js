@@ -90,9 +90,9 @@
 		var settings = {
 				// Images (in the format of 'url': 'alignment', where alignment can be `top`, `center`, or `bottom`).
 				images: {
-					'assets/images/1.jpg': 'center',
-					'assets/images/2.jpg': 'center',
-					'assets/images/3.jpg': 'center',
+					'assets/images/1.png': 'center',
+					'assets/images/2.png': 'center',
+					'assets/images/3.png': 'center',
 					'assets/images/4.png': 'center',
 					'assets/images/5.png': 'center',
 					'assets/images/7.png': 'center',
