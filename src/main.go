@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -17,17 +20,27 @@ const (
 var templates = template.Must(template.ParseGlob("./assets/html/*"))
 
 func main() {
-	http.HandleFunc("/", makeHandler(PREVIEW_PATH))
-	// http.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
-	// http.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
-	// http.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
+	r := mux.NewRouter()
 
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK) })
+	get := r.Methods("GET").Subrouter()
+	get.HandleFunc("/", makeHandler(PREVIEW_PATH))
+	get.HandleFunc(PREVIEW_PATH, makeHandler(PREVIEW_PATH))
+	get.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK) })
+	// get.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
+	// get.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
+	// get.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
 
 	fs := http.FileServer(http.Dir("assets/"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
 
-	log.Fatal(http.ListenAndServe(":5000", nil))
+	server := &http.Server{
+		Handler:      r,
+		Addr:         ":5000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(server.ListenAndServe())
 }
 
 func makeHandler(path string) http.HandlerFunc {
