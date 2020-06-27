@@ -21,11 +21,12 @@ var templates = template.Must(template.ParseGlob("./assets/html/*"))
 
 func main() {
 	r := mux.NewRouter()
+	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {}).Methods(http.MethodGet)
 
-	get := r.Methods("GET").Subrouter()
+	get := r.Methods(http.MethodGet).Subrouter()
+	get.Use(logRequest)
 	get.HandleFunc("/", makeHandler(PREVIEW_PATH))
 	get.HandleFunc(PREVIEW_PATH, makeHandler(PREVIEW_PATH))
-	get.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK) })
 	// get.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
 	// get.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
 	// get.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
@@ -41,6 +42,13 @@ func main() {
 	}
 
 	log.Fatal(server.ListenAndServe())
+}
+
+func logRequest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.Method + ": " + r.RequestURI)
+		next.ServeHTTP(w, r)
+	})
 }
 
 func makeHandler(path string) http.HandlerFunc {
