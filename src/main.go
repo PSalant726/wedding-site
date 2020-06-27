@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"text/template"
 	"time"
 
@@ -17,7 +18,10 @@ const (
 	// RSVP_PATH           = "/rsvp"
 )
 
-var templates = template.Must(template.ParseGlob("./assets/html/*"))
+var (
+	templates   = template.Must(template.ParseGlob("./assets/html/*"))
+	emailSender = NewGmailUser("no-reply@rhiphilwedding.com", os.Getenv("GMAIL_PASSWORD"))
+)
 
 func main() {
 	r := mux.NewRouter()
@@ -30,6 +34,10 @@ func main() {
 	// get.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
 	// get.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
 	// get.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
+
+	post := r.Methods(http.MethodPost).Subrouter()
+	post.Use(logRequest)
+	post.HandleFunc(PREVIEW_PATH, subscribeHandler)
 
 	fs := http.FileServer(http.Dir("assets/"))
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
@@ -68,4 +76,17 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	}
 
 	return nil
+}
+
+func subscribeHandler(w http.ResponseWriter, r *http.Request) {
+	subscriber := r.FormValue("email")
+
+	if err := emailSender.SendNewSubscriberNotification(subscriber); err != nil {
+		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
+		return
+	}
+
+	if err := emailSender.SendSubscribeThankYouMessage(subscriber); err != nil {
+		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
+	}
 }
