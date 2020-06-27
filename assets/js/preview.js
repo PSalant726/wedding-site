@@ -1,6 +1,6 @@
 (function() {
 	"use strict";
-	console.log("Made with ♥, for Rhiannon, by Phil.")
+
 	var	$body = document.querySelector('body');
 	// Methods/polyfills.
 
@@ -90,13 +90,13 @@
 		var settings = {
 				// Images (in the format of 'url': 'alignment', where alignment can be `top`, `center`, or `bottom`).
 				images: {
-					'assets/images/1.png': 'center',
-					'assets/images/2.png': 'center',
-					'assets/images/3.png': 'center',
-					'assets/images/4.png': 'center',
-					'assets/images/5.png': 'center',
-					'assets/images/7.png': 'center',
-					'assets/images/8.png': 'center'
+					'assets/images/couple_1.png': 'center',
+					'assets/images/couple_2.png': 'center',
+					'assets/images/couple_3.png': 'center',
+					'assets/images/couple_4.png': 'center',
+					'assets/images/couple_5.png': 'center',
+					'assets/images/couple_7.png': 'center',
+					'assets/images/couple_8.png': 'center'
 				},
 
 				// Delay.
