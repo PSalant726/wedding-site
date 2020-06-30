@@ -24,7 +24,7 @@ func NewGmailUser(username, password string) *EmailUser {
 			Product: hermes.Product{
 				Name:        "Phil & Rhiannon",
 				Link:        "https://www.rhiphilwedding.com",
-				Logo:        "", // TODO: Link to the logo image
+				Logo:        "https://raw.githubusercontent.com/PSalant726/wedding-site/master/assets/images/logo.png",
 				Copyright:   "Copyright © 2020 Phil Salant. All rights reserved.",
 				TroubleText: "Can't '{ACTION}'? Copy and paste this URL into your web browser instead:",
 			},
@@ -63,11 +63,13 @@ func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
 }
 
 func (eu *EmailUser) SendHermesMessage(recipient, subject string, message hermes.Email) error {
-	var (
-		m            = gomail.NewMessage()
-		html, _      = eu.Hermes.GenerateHTML(message)
-		plainText, _ = eu.Hermes.GeneratePlainText(message)
-	)
+	m := gomail.NewMessage()
+
+	plainText, _ := eu.Hermes.GeneratePlainText(message)
+	html, err := eu.Hermes.GenerateHTML(message)
+	if err != nil {
+		return err
+	}
 
 	m.SetBody("text/plain", plainText)
 	m.AddAlternative("text/html", html)

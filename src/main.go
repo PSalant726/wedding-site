@@ -81,11 +81,9 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 }
 
 func subscribeHandler(w http.ResponseWriter, r *http.Request) {
-	var (
-		redirect   bool
-		subscriber = r.FormValue("email")
-	)
+	var redirect bool
 
+	subscriber := r.FormValue("email")
 	if subscriber == "" {
 		subscriber = r.URL.Query()["address"][0]
 		redirect = true
