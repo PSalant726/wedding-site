@@ -34,6 +34,8 @@ func main() {
 	// get.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
 	// get.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
 	// get.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
+	get.HandleFunc("/subscribe", subscribeHandler).Queries("address", "")
+	get.HandleFunc("/unsubscribe", unsubscribeHandler).Queries("address", "")
 
 	post := r.Methods(http.MethodPost).Subrouter()
 	post.Use(logRequest)
@@ -79,14 +81,42 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 }
 
 func subscribeHandler(w http.ResponseWriter, r *http.Request) {
-	subscriber := r.FormValue("email")
+	var (
+		redirect   bool
+		subscriber = r.FormValue("email")
+	)
 
-	if err := emailSender.SendNewSubscriberNotification(subscriber); err != nil {
+	if subscriber == "" {
+		subscriber = r.URL.Query()["address"][0]
+		redirect = true
+	}
+
+	if err := emailSender.SendNotification(subscriber, true); err != nil {
 		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
 		return
 	}
 
-	if err := emailSender.SendSubscribeThankYouMessage(subscriber); err != nil {
+	message, subject := NewSubscriberThankYouMessage(subscriber)
+	if err := emailSender.SendHermesMessage(subscriber, subject, message); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
 	}
+
+	if redirect {
+		http.Redirect(w, r, PREVIEW_PATH, http.StatusPermanentRedirect)
+	}
+}
+
+func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
+	address := r.URL.Query()["address"][0]
+
+	if err := emailSender.SendNotification(address, false); err != nil {
+		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
+	}
+
+	message, subject := NewUnsubscribeConfirmationMessage(address)
+	if err := emailSender.SendHermesMessage(address, subject, message); err != nil {
+		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
+	}
+
+	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 }
