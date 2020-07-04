@@ -181,9 +181,7 @@
 			$message.classList.add('visible');
 
 			window.setTimeout(
-				function() {
-					$message._hide();
-				},
+				function() { $message._hide(); },
 				3000
 			);
 		};

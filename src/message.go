@@ -40,7 +40,6 @@ func NewUnsubscribeConfirmationMessage(address string) (hermes.Email, string) {
 					},
 				},
 			},
-			Outros:    []string{"Looking forward to seeing you there!"},
 			Signature: "Sincerely",
 		},
 	}, "You have unsubscribed from RhiPhil wedding updates."
