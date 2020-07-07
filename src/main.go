@@ -80,6 +80,12 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	return nil
 }
 
+func previewHandler(w http.ResponseWriter, r *http.Request) {
+	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	var redirect bool
 
