@@ -4,6 +4,7 @@
 
   <body class="index is-preload">
     <div id="page-wrapper">
+      {{ template "nav" . }}
 
       <section id="banner">
         <div class="inner">
@@ -183,8 +184,10 @@
 
         <script src="assets/js/about.js"></script>
       </section>
+
+      {{ template "footer" }}
     </div>
 
     <script src="assets/js/main.js"></script>
-</body>
+  </body>
 </html>

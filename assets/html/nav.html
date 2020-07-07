@@ -1,0 +1,45 @@
+{{ define "nav" }}
+<header id="header" class="alt">
+  <h1 id="logo"><a href="/">#rhiphil <span>June 5, 2021</span></a></h1>
+  <nav id="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li class="submenu">
+        <a href="/schedule">Schedule</a>
+        <ul>
+          <li><a href="/details#ceremony">Ceremony</a></li>
+          <li><a href="/details#reception">Reception</a></li>
+        </ul>
+      </li>
+      <li class="submenu">
+        <a href="/details">Wedding Details</a>
+        <ul>
+          <li><a href="/details#wedding-party">Wedding Party</a></li>
+          <li><a href="/details#vendors">Vendors</a></li>
+        </ul>
+      </li>
+      <li class="submenu">
+        <a href="/travel">Travel</a>
+        <ul>
+          <li><a href="/travel#accommodations">Accommodations</a></li>
+          <li><a href="/travel#directions">Directions</a></li>
+        </ul>
+      </li>
+      <li><a href="/registry">Registry</a></li>
+      <li><a href="/faq">FAQ</a></li>
+      <li><a href="/rsvp" class="button primary">RSVP</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    (function(){
+      $("#nav > ul > li").each(function(idx, $li) {
+        var $a = $li.firstChild
+        if ($a.pathname === document.location.pathname) {
+          $li.className = "current"
+        }
+      })
+    })();
+  </script>
+</header>
+{{ end }}
