@@ -12,10 +12,8 @@ import (
 )
 
 const (
-	// ABOUT_PATH          = "/about"
-	// ACCOMMODATIONS_PATH = "/accommodations"
-	PREVIEW_PATH = "/preview"
-	// RSVP_PATH           = "/rsvp"
+	PREVIEW_PATH   = "/preview"
+	SUBSCRIBE_PATH = "/subscribe"
 )
 
 var (
@@ -29,17 +27,17 @@ func main() {
 
 	get := r.Methods(http.MethodGet).Subrouter()
 	get.Use(logRequest)
-	get.HandleFunc("/", makeHandler(PREVIEW_PATH))
-	get.HandleFunc(PREVIEW_PATH, makeHandler(PREVIEW_PATH))
-	// get.HandleFunc(ABOUT_PATH, makeHandler(ABOUT_PATH))
-	// get.HandleFunc(ACCOMMODATIONS_PATH, makeHandler(ACCOMMODATIONS_PATH))
-	// get.HandleFunc(RSVP_PATH, makeHandler(RSVP_PATH))
-	get.HandleFunc("/subscribe", subscribeHandler).Queries("address", "")
-	get.HandleFunc("/unsubscribe", unsubscribeHandler).Queries("address", "")
+	get.HandleFunc("/", makeHandler("/about"))
+	get.HandleFunc(PREVIEW_PATH, previewHandler)
+
+	getq := get.Queries("address", "").Subrouter()
+	getq.HandleFunc(SUBSCRIBE_PATH, subscribeHandler)
+	getq.HandleFunc("/unsubscribe", unsubscribeHandler)
 
 	post := r.Methods(http.MethodPost).Subrouter()
 	post.Use(logRequest)
 	post.HandleFunc(PREVIEW_PATH, subscribeHandler)
+	post.HandleFunc(SUBSCRIBE_PATH, subscribeHandler)
 
 	fs := http.FileServer(http.Dir("assets/"))
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
@@ -106,7 +104,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if redirect {
-		http.Redirect(w, r, PREVIEW_PATH, http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 	}
 }
 
