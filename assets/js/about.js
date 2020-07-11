@@ -34,6 +34,11 @@
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/subscribe", true);
     xhr.onload = function (e) {
+      if (xhr.status != 200) {
+        $message._show('failure');
+        return
+      }
+
       $form.reset();
       $submit.disabled = false;
       $message._show('success');
