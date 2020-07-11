@@ -67,8 +67,8 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	message, subject := NewSubscriberThankYouMessage(subscriber)
-	if err := emailSender.SendHermesMessage(subscriber, subject, message); err != nil {
+	msg := *NewSubscriberThankYouMessage(subscriber)
+	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
 		return
 	}
@@ -85,8 +85,8 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 	}
 
-	message, subject := NewUnsubscribeConfirmationMessage(address)
-	if err := emailSender.SendHermesMessage(address, subject, message); err != nil {
+	msg := *NewUnsubscribeConfirmationMessage(address)
+	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 	}
 

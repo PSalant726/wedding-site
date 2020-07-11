@@ -26,7 +26,7 @@ func NewGmailUser(username, password string) *EmailUser {
 				Link:        "https://www.rhiphilwedding.com",
 				Logo:        "https://raw.githubusercontent.com/PSalant726/wedding-site/master/assets/images/logo.png",
 				Copyright:   "Copyright © 2020 Phil Salant. All rights reserved.",
-				TroubleText: "Can't '{ACTION}'? Copy and paste this URL into your web browser instead:",
+				TroubleText: "Can't {ACTION}? Copy and paste this URL into your web browser instead:",
 			},
 			TextDirection: hermes.TDLeftToRight,
 		},
@@ -62,21 +62,20 @@ func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
 	return nil
 }
 
-func (eu *EmailUser) SendHermesMessage(recipient, subject string, message hermes.Email) error {
-	m := gomail.NewMessage()
-
-	plainText, _ := eu.Hermes.GeneratePlainText(message)
-	html, err := eu.Hermes.GenerateHTML(message)
+func (eu *EmailUser) SendHermesMessage(message Message) error {
+	plainText, _ := eu.Hermes.GeneratePlainText(message.Body)
+	html, err := eu.Hermes.GenerateHTML(message.Body)
 	if err != nil {
 		return err
 	}
 
+	m := gomail.NewMessage()
 	m.SetBody("text/plain", plainText)
 	m.AddAlternative("text/html", html)
 	m.SetHeaders(map[string][]string{
 		"From":    {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"To":      {m.FormatAddress(recipient, "")},
-		"Subject": {subject},
+		"To":      {m.FormatAddress(message.Recipient, "")},
+		"Subject": {message.Subject},
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
