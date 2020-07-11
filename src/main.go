@@ -11,44 +11,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const (
-	PREVIEW_PATH   = "/preview"
-	SUBSCRIBE_PATH = "/subscribe"
-)
-
 var (
 	templates   = template.Must(template.ParseGlob("./assets/html/*"))
 	emailSender = NewGmailUser("no-reply@rhiphilwedding.com", os.Getenv("GMAIL_PASSWORD"))
 )
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {}).Methods(http.MethodGet)
+	var (
+		r      = mux.NewRouter()
+		server = &http.Server{
+			Handler:      r,
+			Addr:         ":5000",
+			WriteTimeout: 15 * time.Second,
+			ReadTimeout:  15 * time.Second,
+		}
+	)
 
-	get := r.Methods(http.MethodGet).Subrouter()
-	get.Use(logRequest)
-	get.HandleFunc("/", makeHandler("/about"))
-	get.HandleFunc(PREVIEW_PATH, previewHandler)
-
-	getq := get.Queries("address", "").Subrouter()
-	getq.HandleFunc(SUBSCRIBE_PATH, subscribeHandler)
-	getq.HandleFunc("/unsubscribe", unsubscribeHandler)
-
-	post := r.Methods(http.MethodPost).Subrouter()
-	post.Use(logRequest)
-	post.HandleFunc(PREVIEW_PATH, subscribeHandler)
-	post.HandleFunc(SUBSCRIBE_PATH, subscribeHandler)
-
-	fs := http.FileServer(http.Dir("assets/"))
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
-
-	server := &http.Server{
-		Handler:      r,
-		Addr:         ":5000",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
-
+	AddRoutes(r)
 	log.Fatal(server.ListenAndServe())
 }
 
@@ -76,49 +55,4 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	}
 
 	return nil
-}
-
-func previewHandler(w http.ResponseWriter, r *http.Request) {
-	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func subscribeHandler(w http.ResponseWriter, r *http.Request) {
-	var redirect bool
-
-	subscriber := r.FormValue("email")
-	if subscriber == "" {
-		subscriber = r.URL.Query()["address"][0]
-		redirect = true
-	}
-
-	if err := emailSender.SendNotification(subscriber, true); err != nil {
-		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
-		return
-	}
-
-	message, subject := NewSubscriberThankYouMessage(subscriber)
-	if err := emailSender.SendHermesMessage(subscriber, subject, message); err != nil {
-		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
-	}
-
-	if redirect {
-		http.Redirect(w, r, "/", http.StatusPermanentRedirect)
-	}
-}
-
-func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
-	address := r.URL.Query()["address"][0]
-
-	if err := emailSender.SendNotification(address, false); err != nil {
-		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
-	}
-
-	message, subject := NewUnsubscribeConfirmationMessage(address)
-	if err := emailSender.SendHermesMessage(address, subject, message); err != nil {
-		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
-	}
-
-	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 }
