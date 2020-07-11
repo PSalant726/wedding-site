@@ -99,7 +99,7 @@
                   <img src="assets/images/couple_1_home.png" alt="" />
                 </a>
                 <header>
-                  <h3><a href="/schedule">Schedule</a></h3>
+                  <h3><a href="{{ .Links.schedule }}">Schedule</a></h3>
                 </header>
                 <p>
                   Details on the ceremony, reception, and anything else you might want to attend. You'll find
@@ -112,7 +112,7 @@
               <section>
                 <a href="#" class="image featured"><img src="assets/images/couple_4_home.png" alt="" /></a>
                 <header>
-                  <h3><a href="/details">Wedding Details</a></h3>
+                  <h3><a href="{{ .Links.details }}">Wedding Details</a></h3>
                 </header>
                 <p>
                   Information about the wedding party, venue, photographer, band, and everyone else who is
@@ -127,7 +127,7 @@
               <section>
                 <a href="#" class="image featured"><img src="assets/images/couple_5_home.png" alt="" /></a>
                 <header>
-                  <h3><a href="/travel">Travel</a></h3>
+                  <h3><a href="{{ .Links.travel }}">Travel</a></h3>
                 </header>
                 <p>
                   Recommended hotel accommodations, as well as directions from nearby airports and major
@@ -140,7 +140,7 @@
               <section>
                 <a href="#" class="image featured"><img src="assets/images/couple_7_home.png" alt="" /></a>
                 <header>
-                  <h3><a href="/registry">Registry</a></h3>
+                  <h3><a href="{{ .Links.registry }}">Registry</a></h3>
                 </header>
                 <p>
                   The official wedding registry information.
@@ -151,8 +151,8 @@
 
           <footer class="major">
             <ul class="buttons">
-              <li><a href="/rsvp" class="button primary">RSVP</a></li>
-              <li><a href="/faq" class="button">FAQ</a></li>
+              <li><a href="{{ .Links.rsvp }}" class="button primary">RSVP</a></li>
+              <li><a href="{{ .Links.faq }}" class="button">FAQ</a></li>
             </ul>
           </footer>
         </section>
@@ -182,7 +182,7 @@
           </form>
         </footer>
 
-        <script src="assets/js/about.js"></script>
+        <script src="assets/js/signup.js"></script>
       </section>
 
       {{ template "footer" }}

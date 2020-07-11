@@ -1,33 +1,33 @@
 {{ define "nav" }}
 <header id="header" class="alt">
-  <h1 id="logo"><a href="/">#rhiphil <span>June 5, 2021</span></a></h1>
+  <h1 id="logo"><a href="{{ .Links.home }}">#rhiphil <span>June 5, 2021</span></a></h1>
   <nav id="nav">
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="{{ .Links.home }}">Home</a></li>
       <li class="submenu">
-        <a href="/schedule">Schedule</a>
+        <a href="{{ .Links.schedule }}">Schedule</a>
         <ul>
-          <li><a href="/details#ceremony">Ceremony</a></li>
-          <li><a href="/details#reception">Reception</a></li>
+          <li><a href="{{ .Links.schedule }}#ceremony">Ceremony</a></li>
+          <li><a href="{{ .Links.schedule }}#reception">Reception</a></li>
         </ul>
       </li>
       <li class="submenu">
-        <a href="/details">Wedding Details</a>
+        <a href="{{ .Links.details }}">Wedding Details</a>
         <ul>
-          <li><a href="/details#wedding-party">Wedding Party</a></li>
-          <li><a href="/details#vendors">Vendors</a></li>
+          <li><a href="{{ .Links.details }}#wedding-party">Wedding Party</a></li>
+          <li><a href="{{ .Links.details }}#vendors">Vendors</a></li>
         </ul>
       </li>
       <li class="submenu">
-        <a href="/travel">Travel</a>
+        <a href="{{ .Links.travel }}">Travel</a>
         <ul>
-          <li><a href="/travel#accommodations">Accommodations</a></li>
-          <li><a href="/travel#directions">Directions</a></li>
+          <li><a href="{{ .Links.travel }}#accommodations">Accommodations</a></li>
+          <li><a href="{{ .Links.travel }}#directions">Directions</a></li>
         </ul>
       </li>
-      <li><a href="/registry">Registry</a></li>
-      <li><a href="/faq">FAQ</a></li>
-      <li><a href="/rsvp" class="button primary">RSVP</a></li>
+      <li><a href="{{ .Links.registry }}">Registry</a></li>
+      <li><a href="{{ .Links.faq }}">FAQ</a></li>
+      <li><a href="{{ .Links.rsvp }}" class="button primary">RSVP</a></li>
     </ul>
   </nav>
 

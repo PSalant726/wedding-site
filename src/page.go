@@ -4,7 +4,7 @@ import "strings"
 
 type Page struct {
 	Title string
-	JS    string
+	Links map[string]string
 }
 
 func NewPage(path string) *Page {
@@ -12,6 +12,15 @@ func NewPage(path string) *Page {
 
 	return &Page{
 		Title: strings.Title(page),
-		JS:    page,
+		Links: map[string]string{
+			"details":   PathDetails,
+			"faq":       PathFAQ,
+			"home":      PathHome,
+			"registry":  PathRegistry,
+			"rsvp":      PathRSVP,
+			"schedule":  PathSchedule,
+			"subscribe": PathSubscribe,
+			"travel":    PathTravel,
+		},
 	}
 }
