@@ -95,7 +95,7 @@
           <div class="row">
             <div class="col-6 col-12-narrower">
               <section>
-                <a class="image featured" href="#" >
+                <a class="image featured" href="{{ .Links.schedule }}" >
                   <img src="assets/images/couple_1_home.png" alt="" />
                 </a>
                 <header>
@@ -110,7 +110,9 @@
 
             <div class="col-6 col-12-narrower">
               <section>
-                <a href="#" class="image featured"><img src="assets/images/couple_4_home.png" alt="" /></a>
+                <a href="{{ .Links.details }}" class="image featured">
+                  <img src="assets/images/couple_4_home.png" alt="" />
+                </a>
                 <header>
                   <h3><a href="{{ .Links.details }}">Wedding Details</a></h3>
                 </header>
@@ -125,7 +127,9 @@
           <div class="row">
             <div class="col-6 col-12-narrower">
               <section>
-                <a href="#" class="image featured"><img src="assets/images/couple_5_home.png" alt="" /></a>
+                <a href="{{ .Links.travel }}" class="image featured">
+                  <img src="assets/images/couple_5_home.png" alt="" />
+                </a>
                 <header>
                   <h3><a href="{{ .Links.travel }}">Travel</a></h3>
                 </header>
@@ -138,7 +142,9 @@
 
             <div class="col-6 col-12-narrower">
               <section>
-                <a href="#" class="image featured"><img src="assets/images/couple_7_home.png" alt="" /></a>
+                <a href="{{ .Links.registry }}" class="image featured">
+                  <img src="assets/images/couple_7_home.png" alt="" />
+                </a>
                 <header>
                   <h3><a href="{{ .Links.registry }}">Registry</a></h3>
                 </header>
