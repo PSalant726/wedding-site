@@ -46,6 +46,12 @@ func NewRouterWithRoutes() *mux.Router {
 	// GET requests
 	get.Use(logRequest)
 	get.HandleFunc(PathHome, makeHandler(PathAbout))
+	get.HandleFunc(PathDetails, makeHandler(PathDetails))
+	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
+	get.HandleFunc(PathRegistry, makeHandler(PathRegistry))
+	get.HandleFunc(PathRSVP, makeHandler(PathRSVP))
+	get.HandleFunc(PathSchedule, makeHandler(PathSchedule))
+	get.HandleFunc(PathTravel, makeHandler(PathTravel))
 	get.HandleFunc(PathPreview, previewHandler)
 
 	// GET requests with ?address=...
