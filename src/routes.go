@@ -16,6 +16,7 @@ const (
 	PathHealth      = "/health"
 	PathHome        = "/"
 	PathPreview     = "/preview"
+	PathQuestion    = "/question"
 	PathRegistry    = "/registry"
 	PathRSVP        = "/rsvp"
 	PathSchedule    = "/schedule"
@@ -63,6 +64,7 @@ func NewRouterWithRoutes() *mux.Router {
 	post.Use(logRequest)
 	post.HandleFunc(PathPreview, subscribeHandler)
 	post.HandleFunc(PathSubscribe, subscribeHandler)
+	post.HandleFunc(PathQuestion, questionHandler)
 
 	return router
 }
@@ -105,7 +107,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 		subscriber = r.FormValue("email")
 	}
 
-	if err := emailSender.SendNotification(subscriber, true); err != nil {
+	if err := emailSender.SendSubscriberNotification(subscriber, true); err != nil {
 		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
 		return
 	}
@@ -124,7 +126,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	address := r.URL.Query()["address"][0]
 
-	if err := emailSender.SendNotification(address, false); err != nil {
+	if err := emailSender.SendSubscriberNotification(address, false); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 	}
 
@@ -134,4 +136,23 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, PathHome, http.StatusPermanentRedirect)
+}
+
+func questionHandler(w http.ResponseWriter, r *http.Request) {
+	var (
+		senderName  = r.FormValue("name")
+		senderEmail = r.FormValue("email")
+		question    = r.FormValue("question")
+	)
+
+	if err := emailSender.SendQuestionNotification(senderName, senderEmail, question); err != nil {
+		http.Error(w, "Failed to notify Phil & Rhiannon about your question. Please try again.", http.StatusInternalServerError)
+		return
+	}
+
+	msg := *NewQuestionReceivedMessage(senderName, senderEmail, question)
+	if err := emailSender.SendHermesMessage(msg); err != nil {
+		http.Error(w, "Failed to confirm receipt of your question. Please try again.", http.StatusInternalServerError)
+		return
+	}
 }

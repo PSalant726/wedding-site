@@ -33,7 +33,7 @@ func NewGmailUser(username, password string) *EmailUser {
 	}
 }
 
-func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
+func (eu *EmailUser) SendSubscriberNotification(user string, isSubscribing bool) error {
 	var (
 		m       = gomail.NewMessage()
 		subject string
@@ -53,6 +53,27 @@ func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
 		"From":    {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
 		"To":      {m.FormatAddress(eu.Username, "Subscriber Notification")},
 		"Subject": {subject},
+	})
+
+	if err := eu.Dialer.DialAndSend(m); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question string) error {
+	var (
+		m    = gomail.NewMessage()
+		body = fmt.Sprintf("%s (%s) has asked the following question:\n\n%s", userName, userEmail, question)
+	)
+
+	m.SetBody("text/plain", body)
+	m.SetHeaders(map[string][]string{
+		"From":     {m.FormatAddress(eu.Username, "Wedding Guest Questions")},
+		"To":       {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
+		"Reply-To": {m.FormatAddress(userEmail, userName)},
+		"Subject":  {fmt.Sprintf("[Guest Question] %s has asked a question", userName)},
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {

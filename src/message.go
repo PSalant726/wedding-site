@@ -58,3 +58,31 @@ func NewUnsubscribeConfirmationMessage(address string) *Message {
 		},
 	}
 }
+
+func NewQuestionReceivedMessage(userName, userEmail, question string) *Message {
+	return &Message{
+		Recipient: userEmail,
+		Subject:   "We've received your question",
+		Body: hermes.Email{
+			Body: hermes.Body{
+				Name: userName,
+				Intros: []string{
+					"Thanks for sending us your question!",
+					"We probably haven't seen it yet, but we're sure it was a good one. " +
+						"Keep an eye on your inbox for an answer; we'll get back to you as soon as we can.",
+				},
+				Dictionary: []hermes.Entry{
+					{
+						Key:   "You Asked",
+						Value: question,
+					},
+					{
+						Key:   "We'll send our answer to",
+						Value: userEmail,
+					},
+				},
+				Signature: "Sincerely",
+			},
+		},
+	}
+}
