@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"text/template"
@@ -77,6 +78,7 @@ func makeHandler(path string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := renderTemplate(w, path, p); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
 		}
 	}
 }
@@ -93,6 +95,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 func previewHandler(w http.ResponseWriter, r *http.Request) {
 	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err)
 	}
 }
 
@@ -111,13 +114,13 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := emailSender.SendSubscriberNotification(subscriber, true); err != nil {
 		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
-		return
+		log.Println(err)
 	}
 
 	msg := *NewSubscriberThankYouMessage(subscriber)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
-		return
+		log.Println(err)
 	}
 
 	if redirect {
@@ -130,11 +133,13 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := emailSender.SendSubscriberNotification(address, false); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
+		log.Println(err)
 	}
 
 	msg := *NewUnsubscribeConfirmationMessage(address)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
+		log.Println(err)
 	}
 
 	redirectHome(w, r)
@@ -149,13 +154,14 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := emailSender.SendQuestionNotification(senderName, senderEmail, question); err != nil {
 		http.Error(w, "Failed to notify Phil & Rhiannon about your question. Please try again.", http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
 	msg := *NewQuestionReceivedMessage(senderName, senderEmail, question)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to confirm receipt of your question. Please try again.", http.StatusInternalServerError)
-		return
+		log.Println(err)
 	}
 }
 
