@@ -35,12 +35,14 @@ var (
 func NewRouterWithRoutes() *mux.Router {
 	var (
 		router = mux.NewRouter()
+		fs     = http.FileServer(http.Dir(RelativePathAssets))
 		get    = router.Methods(http.MethodGet).Subrouter()
 		getq   = get.Queries("address", "").Subrouter()
 		post   = router.Methods(http.MethodPost).Subrouter()
-		fs     = http.FileServer(http.Dir(RelativePathAssets))
 	)
 
+	router.NotFoundHandler = http.HandlerFunc(redirectHome)
+	router.MethodNotAllowedHandler = http.HandlerFunc(redirectHome)
 	router.HandleFunc(PathHealth, func(w http.ResponseWriter, r *http.Request) {}).Methods(http.MethodGet)
 	router.PathPrefix("/" + RelativePathAssets).Handler(http.StripPrefix("/"+RelativePathAssets, fs))
 
@@ -119,7 +121,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if redirect {
-		http.Redirect(w, r, PathHome, http.StatusPermanentRedirect)
+		redirectHome(w, r)
 	}
 }
 
@@ -135,7 +137,7 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 	}
 
-	http.Redirect(w, r, PathHome, http.StatusPermanentRedirect)
+	redirectHome(w, r)
 }
 
 func questionHandler(w http.ResponseWriter, r *http.Request) {
@@ -155,4 +157,8 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to confirm receipt of your question. Please try again.", http.StatusInternalServerError)
 		return
 	}
+}
+
+func redirectHome(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, PathHome, http.StatusPermanentRedirect)
 }
