@@ -16,6 +16,7 @@ func NewPage(path string) *Page {
 			"details":   PathDetails,
 			"faq":       PathFAQ,
 			"home":      PathHome,
+			"images":    RelativePathAssets + "images",
 			"registry":  PathRegistry,
 			"rsvp":      PathRSVP,
 			"schedule":  PathSchedule,
