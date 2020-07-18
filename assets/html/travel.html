@@ -4,6 +4,176 @@
 <body>
   {{ template "nav" . }}
 
+  <article id="main">
+    <header class="special container">
+      <span class="icon solid fa-route"></span>
+      <h2><strong>Travel</strong> & Accommodations</h2>
+      <p>Hotel & airport options for our out-of-town guests.</p>
+    </header>
+
+    <section class="wrapper style4 container">
+      <div class="row gtr-150">
+        <div class="col-4 col-12-narrower">
+          <div class="sidebar">
+            <section>
+              <a href="#" class="image featured"><img src="{{ .Links.images }}/pic01.jpg" alt="" /></a>
+              <header>
+                <h3>Secondary Hotel</h3>
+              </header>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut in turpis consequat mi mattis finibus.
+                Maecenas quam tortor, dignissim vitae auctor quis, auctor nec magna. Sed eu tristique quam. Donec
+                vitae fringilla diam, nec convallis eros. In vehicula risus a eros tristique, a sagittis erat hendrerit.
+              </p>
+              <footer>
+                <ul class="buttons">
+                  <li><a href="#" class="button small">Learn More</a></li>
+                </ul>
+              </footer>
+            </section>
+
+            <section>
+              <header>
+                <h3>Airbnb</h3>
+              </header>
+              <p>
+                Experience the historic victorian-era architecture of Cape May, NJ first-hand by renting a
+                nearby home with Airbnb!
+              </p>
+              <footer>
+                <ul class="buttons">
+                  <li>
+                    <a href="https://www.airbnb.com/s/Cape-May--NJ--United-States/homes?place_id=ChIJlffuOkRUv4kRovRz4Zz3t8I&query=Cape%20May%2C%20NJ%2C%20United%20States&checkin=2021-06-04&checkout=2021-06-06" class="button small">
+                      Search
+                    </a>
+                  </li>
+                </ul>
+              </footer>
+            </section>
+          </div>
+        </div>
+
+        <div class="col-8 col-12-narrower imp-narrower">
+          <div class="content">
+            <section>
+              <a href="https://www.grandhotelcapemay.com/" class="image featured">
+                <img src="{{ .Links.images }}/grand_hotel.png" alt="" />
+              </a>
+
+              <header>
+                <h3><strong>The Grand Hotel</strong> of Cape May</h3>
+              </header>
+
+              <p>
+                1045 Beach Avenue<br />
+                Cape May, New Jersey 08204<br />
+                <a href="tel:6098845611">(609) 884 - 5611</a>
+              </p>
+              <p>
+                This is where we've booked our room block for June 4<sup>th</sup> - 6<sup>th</sup>, and where both
+                the ceremony and reception will take place.
+              </p>
+              <p>
+                The Grand Hotel offers a variety of lodging accommodations including Double, Queen and King-size bedding,
+                some with efficiency units included. There are also several different suite options available, and ask
+                about the newly renovated Two Story Townhouse Suites! Resort amenities include an olympic size heated
+                outdoor & heated indoor pool with large Jacuzzi, bicycle rentals on site, professional fitness facility,
+                family fun game room and more. Stay just steps from the beach and minutes from local boutique shops, quaint
+                streets to tour, and casual eateries to feast.
+              </p>
+
+              <footer>
+                <ul class="buttons">
+                  <li>
+                    <a href="https://www.reseze.net/servlet/WebresResDesk?hotelid=1606" class="button primary">Book Now</a>
+                  </li>
+                  <li>
+                    <a href="https://www.grandhotelcapemay.com/" class="button">Learn More</a>
+                  </li>
+                </ul>
+              </footer>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <header class="special container">
+      <span class="icon solid fa-map-marked-alt"></span>
+      <h2>Directions to <strong>The Grand Hotel</strong></h2>
+    </header>
+
+    <section class="wrapper style1 container special">
+      <div class="row">
+        <div class="col-4 col-12-narrower">
+          <section>
+            <span class="icon solid featured fa-plane"></span>
+            <header>
+              <h3>From Philadelphia</h3>
+            </header>
+            <p>
+              Philadelphia International Airport (PHL) is the closest major airport, and a roughly 90 minute drive
+              to Cape May. It is significantly closer to Cape May than the New York City airports.
+            </p>
+            <footer>
+              <ul class="buttons">
+                <li>
+                  <a href="https://www.google.com/maps/dir/Philadelphia+International+Airport+(PHL),+Essington+Ave,+Philadelphia,+PA/1045+Beach+Avenue,+Cape+May,+NJ/@39.4192608,-75.5334272,9z/data=!3m1!4b1!4m18!4m17!1m5!1m1!1s0x89c6c46660a9832f:0x3e2e15944637d3d8!2m2!1d-75.2424229!2d39.8743959!1m5!1m1!1s0x89bf546807220f9d:0x11f5a3cab958fa01!2m2!1d-74.9091624!2d38.9328658!2m3!6e1!7e2!8j1622835000!3e0" class="button small">
+                    Directions
+                  </a>
+                </li>
+              </ul>
+            </footer>
+          </section>
+        </div>
+
+        <div class="col-4 col-12-narrower">
+          <section>
+            <span class="icon solid featured fa-plane-arrival"></span>
+            <header>
+              <h3>From Atlantic City</h3>
+            </header>
+            <p>
+              Atlantic City International Airport (ACY) is closer to Cape May than Philadelphia, at a roughly 45
+              minute drive, but services fewer flights and airlines.
+            </p>
+            <footer>
+              <ul class="buttons">
+                <li>
+                  <a href="https://www.google.com/maps/dir/Atlantic+City+International+Airport,+Egg+Harbor+Township,+NJ/1045+Beach+Avenue,+Cape+May,+NJ/@39.1915293,-75.0173814,10z/data=!3m1!4b1!4m18!4m17!1m5!1m1!1s0x89c0e7eb84a4fa1f:0x1792b1f98f6397a2!2m2!1d-74.573885!2d39.4515696!1m5!1m1!1s0x89bf546807220f9d:0x11f5a3cab958fa01!2m2!1d-74.9091624!2d38.9328658!2m3!6e1!7e2!8j1622835000!3e0" class="button small">
+                    Directions
+                  </a>
+                </li>
+              </ul>
+            </footer>
+          </section>
+        </div>
+
+        <div class="col-4 col-12-narrower">
+          <section>
+            <span class="icon solid featured fa-car"></span>
+            <header>
+              <h3>From New York City</h3>
+            </header>
+            <p>
+              For our guests traveling from New York City, we recommend either driving or taking a bus. You can
+              expect the trip to take about three hours, but we promise it'll be worth it!
+            </p>
+            <footer>
+              <ul class="buttons">
+                <li>
+                  <a href="https://www.google.com/maps/dir/Times+Square,+Manhattan,+NY/1045+Beach+Avenue,+Cape+May,+NJ/@39.8508235,-75.754905,8z/data=!3m1!4b1!4m18!4m17!1m5!1m1!1s0x89c25855c6480299:0x55194ec5a1ae072e!2m2!1d-73.9855426!2d40.7579747!1m5!1m1!1s0x89bf546807220f9d:0x11f5a3cab958fa01!2m2!1d-74.9091624!2d38.9328658!2m3!6e1!7e2!8j1622835000!3e0" class="button small">
+                    Directions
+                  </a>
+                </li>
+              </ul>
+            </footer>
+          </section>
+        </div>
+      </div>
+    </section>
+  </article>
+
   {{ template "footer" }}
 </body>
 </html>
