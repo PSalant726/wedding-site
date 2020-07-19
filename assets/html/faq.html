@@ -14,7 +14,7 @@
     <section class="wrapper style4 container">
       <div class="content">
         <section>
-          <a class="image featured"><img src="assets/images/couple_5_home.png" alt="" /></a>
+          <a class="image featured"><img src="{{ .Assets.images }}couple_5_home.png" alt="" /></a>
 
           <header>
             <h2>Can I bring my children?</h2>
@@ -102,10 +102,10 @@
         </form>
       </div>
 
-      <script src="assets/js/form.js"></script>
+      <script src="{{ .Assets.js }}form.js"></script>
     </section>
   </article>
 
-  {{ template "footer" }}
+  {{ template "footer" . }}
 </body>
 </html>

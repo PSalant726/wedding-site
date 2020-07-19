@@ -101,7 +101,7 @@
             <div class="col-6 col-12-narrower">
               <section>
                 <a class="image featured" href="{{ .Links.schedule }}" >
-                  <img src="assets/images/couple_1_home.png" alt="" />
+                  <img src="{{ .Assets.images }}couple_1_home.png" alt="" />
                 </a>
                 <header>
                   <h3><a href="{{ .Links.schedule }}">Schedule</a></h3>
@@ -116,7 +116,7 @@
             <div class="col-6 col-12-narrower">
               <section>
                 <a href="{{ .Links.details }}" class="image featured">
-                  <img src="assets/images/couple_4_home.png" alt="" />
+                  <img src="{{ .Assets.images }}couple_4_home.png" alt="" />
                 </a>
                 <header>
                   <h3><a href="{{ .Links.details }}">Wedding Details</a></h3>
@@ -133,7 +133,7 @@
             <div class="col-6 col-12-narrower">
               <section>
                 <a href="{{ .Links.travel }}" class="image featured">
-                  <img src="assets/images/couple_5_home.png" alt="" />
+                  <img src="{{ .Assets.images }}couple_5_home.png" alt="" />
                 </a>
                 <header>
                   <h3><a href="{{ .Links.travel }}">Travel</a></h3>
@@ -148,7 +148,7 @@
             <div class="col-6 col-12-narrower">
               <section>
                 <a href="{{ .Links.registry }}" class="image featured">
-                  <img src="assets/images/couple_7_home.png" alt="" />
+                  <img src="{{ .Assets.images }}couple_7_home.png" alt="" />
                 </a>
                 <header>
                   <h3><a href="{{ .Links.registry }}">Registry</a></h3>
@@ -196,10 +196,10 @@
           </form>
         </footer>
 
-        <script src="assets/js/form.js"></script>
+        <script src="{{ .Assets.js }}form.js"></script>
       </section>
 
-      {{ template "footer" }}
+      {{ template "footer" . }}
     </div>
   </body>
 </html>
