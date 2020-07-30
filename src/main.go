@@ -56,7 +56,14 @@ func main() {
 
 func logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("(%s) %s: %s", r.RemoteAddr, r.Method, r.URL)
+		var ip string
+		if _, ok := r.Header["X-Forwarded-For"]; ok {
+			ip = r.Header["X-Forwarded-For"][0]
+		} else {
+			ip = r.RemoteAddr
+		}
+
+		log.Printf("(%s) %s: %s", ip, r.Method, r.URL)
 		next.ServeHTTP(w, r)
 	})
 }
