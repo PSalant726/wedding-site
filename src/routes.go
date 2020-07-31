@@ -12,10 +12,10 @@ import (
 
 const (
 	PathAbout       = "/about"
-	PathDetails     = "/details"
 	PathFAQ         = "/faq"
 	PathHealth      = "/health"
 	PathHome        = "/"
+	PathPeople      = "/people"
 	PathPreview     = "/preview"
 	PathQuestion    = "/question"
 	PathRegistry    = "/registry"
@@ -50,7 +50,7 @@ func NewRouterWithRoutes() *mux.Router {
 	// GET requests
 	get.Use(logRequest)
 	get.HandleFunc(PathHome, makeHandler(PathAbout))
-	get.HandleFunc(PathDetails, makeHandler(PathDetails))
+	get.HandleFunc(PathPeople, makeHandler(PathPeople))
 	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
 	get.HandleFunc(PathRegistry, makeHandler(PathRegistry))
 	get.HandleFunc(PathRSVP, makeHandler(PathRSVP))
