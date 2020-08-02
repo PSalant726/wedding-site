@@ -1988,6 +1988,24 @@ input, select, textarea {
 					background: #df93b8;
 				}
 
+			.icon.circle.fa-google {
+				background: #db6b67;
+				color: #fff;
+			}
+
+				.icon.circle.fa-google:hover {
+					background: #df7b77;
+				}
+
+			.icon.circle.fa-instagram {
+				background: #c13584;
+				color: #fff;
+			}
+
+				.icon.circle.fa-instagram:hover {
+					background: #e1306c;
+				}
+
 		.icon.featured {
 			cursor: default;
 			display: block;
