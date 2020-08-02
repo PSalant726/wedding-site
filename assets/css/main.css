@@ -2555,7 +2555,7 @@ input, select, textarea {
 		background-attachment: scroll, scroll, scroll, fixed;
 		background-color: #645862;
 		background-image: url("images/light-bl.svg"), url("images/light-br.svg"), url("images/overlay.png"), url("../images/boardwalk.png");
-		background-position: bottom left, bottom right, top left, 50% -300%;
+		background-position: bottom left, bottom right, top left, 50% 0%;
 		background-repeat: no-repeat, no-repeat, repeat, no-repeat;
 		background-size: 25em, 25em, auto, auto;
 		color: #fff;
@@ -2712,7 +2712,6 @@ input, select, textarea {
 				padding-top: 5.5em;
 				margin-bottom: 4em;
 			}
-
 	}
 
 /* Normal */
@@ -2762,6 +2761,8 @@ input, select, textarea {
 
 			#banner {
 				background-attachment: scroll;
+				background-position: bottom left, bottom right, top left, 50% 50%;
+				background-size: 25em, 25em, auto, auto;
 			}
 
 		/* CTA */
@@ -2836,6 +2837,7 @@ input, select, textarea {
 		/* Banner */
 
 			#banner {
+				background-position: bottom left, bottom right, top left, 50% 50%;
 				background-size: 15em, 15em, auto, cover;
 			}
 
@@ -2941,6 +2943,8 @@ input, select, textarea {
 
 			#banner {
 				margin: 0;
+				background-position: bottom left, bottom right, top left, 50% 50%;
+				background-size: 25em, 25em, auto, auto;
 			}
 
 		/* Wrapper */
@@ -3291,6 +3295,7 @@ input, select, textarea {
 		/* Banner */
 
 			#banner {
+				background-position: bottom left, bottom right, top left, 50% 0%;
 				background-size: 10em, 10em, auto, cover;
 				padding: 6em 0;
 			}
