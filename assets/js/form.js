@@ -1,8 +1,7 @@
-(function () {
+(function() {
   var forms = {
     signup: {
       selector: '#signup-form',
-      listSelector: 'ul',
       endpoint: '/subscribe',
       errorResponseMessage: function(xhr) { return null; },
       serverErrorMessage: null,
@@ -10,11 +9,17 @@
     },
     question: {
       selector: '#question-form',
-      listSelector: 'div.row',
       endpoint: '/question',
       errorResponseMessage: function(xhr) { return xhr.response; },
       serverErrorMessage: 'Something went wrong. Please try again.',
       successMessage: 'Thank you for your question!'
+    },
+    rsvp: {
+      selector: '#rsvp-form',
+      endpoint: '/rsvp',
+      errorResponseMessage: function (xhr) { return xhr.response; },
+      serverErrorMessage: 'Something went wrong. Please try again.',
+      successMessage: 'Thank you for your RSVP!'
     }
   };
 
@@ -23,30 +28,31 @@
     form = forms.signup;
   } else if ($('#question-form').length) {
     form = forms.question;
+  } else if ($('#rsvp-form').length) {
+    form = forms.rsvp;
   }
 
   var $form = $(form.selector)[0];
-  var $list = $(form.listSelector, $form)[0];
   var $submit = $('input[type="submit"]', $form)[0];
   var $message = $('.message-container > span.message', $form)[0];
 
   if (!('addEventListener' in $form)) { return; }
 
-  $message._show = function (type, text) {
+  $message._show = function(type, text) {
     $message.classList.add(type, 'visible');
     $message.innerHTML = text;
 
     window.setTimeout(
-      function () { $message._hide(); },
+      function() { $message._hide(); },
       5000
     );
   };
 
-  $message._hide = function () {
+  $message._hide = function() {
     $message.classList.remove('visible');
   };
 
-  $form.addEventListener('submit', function (event) {
+  $form.addEventListener('submit', function(event) {
     event.stopPropagation();
     event.preventDefault();
 
@@ -56,7 +62,7 @@
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", form.endpoint, true);
-    xhr.onload = function (e) {
+    xhr.onload = function(e) {
       $submit.disabled = false;
 
       if (xhr.status < 200 || xhr.status > 299) {
@@ -68,7 +74,7 @@
       }
     }
 
-    xhr.onerror = function (e) {
+    xhr.onerror = function(e) {
       $message._show('failure', form.serverErrorMessage);
     }
 

@@ -3,6 +3,67 @@
 {{ template "head" . }}
 <body>
   {{ template "nav" . }}
+
+  <article id="main">
+    <header class="special container">
+      <span class="icon solid fa-envelope"></span>
+      <h2>RSVP</h2>
+    </header>
+
+    <section class="wrapper style4 special container medium">
+      <p>
+        Please enter your first name, last name, and zip code exactly as they appear on your
+        invitation. If you're responding for yourself and a guest (or your family), please include
+        their names in the field labeled "Guest(s)" and separate them with commas. Otherwise,
+        you may leave that field blank. If necessary, you may reuse this form later to change your
+        response.
+      </p>
+
+      <div class="content">
+        <form id="rsvp-form" action="#">
+          <div class="row gtr-50">
+            <div class="col-6 col-12-mobile">
+              <input type="text" name="fname" placeholder="First Name" />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input type="text" name="lname" placeholder="Last Name" />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input type="email" name="email" placeholder="Email" />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input type="text" name="zip" placeholder="Invitation Zip Code" />
+            </div>
+            <div class="col-12">
+              <input type="text" name="guests" placeholder="Guest(s)" />
+            </div>
+            <div class="col-6 col-12-narrower">
+              <input type="radio" id="attending" name="response">
+              <label for="attending">Attending</label>
+            </div>
+            <div class="col-6 col-12-narrower">
+              <input type="radio" id="not-attending" name="response">
+              <label for="not-attending">Not Attending</label>
+            </div>
+            <div class="col-12">
+              <textarea name="message" placeholder="Add a Message" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+              <ul class="buttons">
+                <li><input type="submit" class="special primary" value="Submit RSVP" /></li>
+              </ul>
+            </div>
+            <div class="message-container col-12">
+              <span class="message">Placeholder</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <script src="{{ .Assets.js }}form.js"></script>
+    </section>
+  </article>
+
   {{ template "footer" . }}
 </body>
 </html>

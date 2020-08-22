@@ -66,8 +66,9 @@ func NewRouterWithRoutes() *mux.Router {
 	// POST requests
 	post.Use(logRequest)
 	post.HandleFunc(PathPreview, subscribeHandler)
-	post.HandleFunc(PathSubscribe, subscribeHandler)
 	post.HandleFunc(PathQuestion, questionHandler)
+	post.HandleFunc(PathRSVP, rsvpHandler)
+	post.HandleFunc(PathSubscribe, subscribeHandler)
 
 	return router
 }
@@ -195,6 +196,10 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to confirm receipt of your question. Please try again.", http.StatusInternalServerError)
 		log.Println(err)
 	}
+}
+
+func rsvpHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "Endpoint not configured", http.StatusInternalServerError)
 }
 
 func redirectHome(w http.ResponseWriter, r *http.Request) {
