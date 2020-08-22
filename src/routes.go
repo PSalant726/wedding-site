@@ -112,15 +112,37 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 		subscriber = r.FormValue("email")
 	}
 
+	if subscriber == "" {
+		http.Error(w, "Please enter an email address", http.StatusInternalServerError)
+
+		if redirect {
+			redirectHome(w, r)
+		}
+
+		return
+	}
+
 	if err := emailSender.SendSubscriberNotification(subscriber, true); err != nil {
 		http.Error(w, "Failed to send subscriber notification", http.StatusInternalServerError)
 		log.Println(err)
+
+		if redirect {
+			redirectHome(w, r)
+		}
+
+		return
 	}
 
 	msg := *NewSubscriberThankYouMessage(subscriber)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
 		log.Println(err)
+
+		if redirect {
+			redirectHome(w, r)
+		}
+
+		return
 	}
 
 	if redirect {
@@ -134,12 +156,16 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendSubscriberNotification(address, false); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
+		redirectHome(w, r)
+		return
 	}
 
 	msg := *NewUnsubscribeConfirmationMessage(address)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
+		redirectHome(w, r)
+		return
 	}
 
 	redirectHome(w, r)
@@ -151,6 +177,12 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 		senderEmail = r.FormValue("email")
 		question    = r.FormValue("question")
 	)
+
+	if senderName == "" || senderEmail == "" || question == "" {
+		http.Error(w, "Please include your name, email address, and a question.", http.StatusInternalServerError)
+		log.Println("Could not send question: Missing form data")
+		return
+	}
 
 	if err := emailSender.SendQuestionNotification(senderName, senderEmail, question); err != nil {
 		http.Error(w, "Failed to notify Phil & Rhiannon about your question. Please try again.", http.StatusInternalServerError)
