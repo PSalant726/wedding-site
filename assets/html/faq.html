@@ -82,13 +82,25 @@
         <form id="question-form" action="#">
           <div class="row gtr-50">
             <div class="col-6 col-12-mobile">
-              <input type="text" name="name" placeholder="Name" />
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                oninvalid="this.setCustomValidity('Please enter your name.')"
+                oninput="this.setCustomValidity('')"
+                required/>
             </div>
             <div class="col-6 col-12-mobile">
-              <input type="email" name="email" placeholder="Email" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                oninvalid="this.setCustomValidity('Please enter an email address.')"
+                oninput="this.setCustomValidity('')"
+                required />
             </div>
             <div class="col-12">
-              <textarea name="question" placeholder="Will Freddy be there?!" rows="3"></textarea>
+              <textarea name="question" placeholder="Will Freddy be there?!" rows="3" required></textarea>
             </div>
             <div class="col-12">
               <ul class="buttons">
