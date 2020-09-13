@@ -73,8 +73,8 @@
                 title="Please list the guests you plan to bring with you, but do not include yourself.
                   If including more than one guest, this must be a comma-separated list of their first
                   and last name(s) exactly as they appear on your invitation."
-                pattern="[\w\s-.]+(,[\w\s-.]+)*"
-                oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you, but do not include yourself.'
+                pattern="[\w\s.-]+(,[\w\s.-]+)*"
+                oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you, but do not include yourself. '
                   + 'If including more than one guest, this must be a comma-separated list of their first '
                   + 'and last name(s) exactly as they appear on your invitation.')"
                 oninput="this.setCustomValidity('')" />
@@ -85,36 +85,18 @@
             <div class="col-6 col-12-narrower">
               <input
                 type="radio"
-                id="attending-ceremony"
-                name="response"
-                title="Select this option if you will be attending just the ceremony."
-                required />
-              <label for="attending-ceremony">Attending the Ceremony Only</label>
-            </div>
-            <div class="col-6 col-12-narrower">
-              <input
-                type="radio"
-                id="attending-reception"
-                name="response"
-                title="Select this option if you will be attending just the reception."
-                required />
-              <label for="attending-reception">Attending the Reception Only</label>
-            </div>
-            <div class="col-6 col-12-narrower">
-              <input
-                type="radio"
                 id="attending"
                 name="response"
-                title="Select this option if you will be attending both the ceremony and reception."
+                title="Select this option if you and the specified guests will be attending."
                 required />
-              <label for="attending">Attending the Ceremony & Reception</label>
+              <label for="attending">Attending</label>
             </div>
             <div class="col-6 col-12-narrower">
               <input
                 type="radio"
                 id="not-attending"
                 name="response"
-                title="Select this option if you will neither be attenting the ceremony nor the reception."
+                title="Select this option if you will and the specified guests will not be attending."
                 required />
               <label for="not-attending">Not Attending</label>
             </div>
