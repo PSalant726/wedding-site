@@ -170,36 +170,7 @@
         </section>
       </article>
 
-      <section id="cta">
-        <header>
-          <h2>Want to stay <strong>in the loop</strong>?</h2>
-          <p>Subscribe now and you'll receive an email when there's more information to share.</p>
-        </header>
-
-        <footer>
-          <form id="signup-form" action="#">
-            <ul class="buttons">
-              <li><input
-                id="email"
-                name="email"
-                placeholder="Email"
-                style="background-color: #fff; color: #7c8081;"
-                type="email"
-                required /></li>
-              <li><input
-                class="button primary"
-                style="min-width: 12em; line-height: 3.4em;"
-                type="submit"
-                value="Subscribe" /></li>
-              <li class="message-container">
-                <span class="message"></span>
-              </li>
-            </ul>
-          </form>
-        </footer>
-
-        <script src="{{ .Assets.js }}form.js"></script>
-      </section>
+      {{ template "subscribe" . }}
 
       {{ template "footer" . }}
     </div>
