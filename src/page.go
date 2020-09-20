@@ -3,9 +3,9 @@ package main
 import "strings"
 
 type Page struct {
-	Title string
-	CSS   string
-	JS    string
+	Title  string
+	Assets map[string]string
+	Links  map[string]string
 }
 
 func NewPage(path string) *Page {
@@ -13,7 +13,20 @@ func NewPage(path string) *Page {
 
 	return &Page{
 		Title: strings.Title(page),
-		CSS:   page,
-		JS:    page,
+		Assets: map[string]string{
+			"css":    RelativePathAssets + "css/",
+			"images": RelativePathAssets + "images/",
+			"js":     RelativePathAssets + "js/",
+		},
+		Links: map[string]string{
+			"faq":       PathFAQ,
+			"home":      PathHome,
+			"people":    PathPeople,
+			"registry":  PathRegistry,
+			"rsvp":      PathRSVP,
+			"schedule":  PathSchedule,
+			"subscribe": PathSubscribe,
+			"travel":    PathTravel,
+		},
 	}
 }

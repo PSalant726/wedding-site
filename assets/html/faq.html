@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ template "head" . }}
+<body>
+  {{ template "nav" . }}
+
+  <article id="main">
+    <header class="special container">
+      <span class="icon solid fa-question"></span>
+      <h2>Frequently Asked <strong>Questions</strong></h2>
+      <!-- <p>Check here before you text.</p> -->
+    </header>
+
+    <section class="wrapper style4 container">
+      <div class="content">
+        <section>
+          <a class="image featured"><img src="{{ .Assets.images }}couple_5_home.png" alt="" /></a>
+
+          <header>
+            <h2>Can I bring my children?</h2>
+          </header>
+          <p>
+            While we love your little ones, we want everyone to be able to relax and enjoy the evening.
+            Our wedding is going to be an adults-only event, and we appreciate you making arrangements
+            ahead of time so you can celebrate with us.
+          </p>
+
+          <header>
+            <h2>Can I bring a date?</h2>
+          </header>
+          <p>
+            Our wedding is strictly RSVP only. We will only able to accommodate those listed on your invitation.
+          </p>
+
+          <header>
+            <h2>Is there a dress code?</h2>
+          </header>
+          <p>
+            Cocktail attire, generally, but we want you to feel comfortable.
+            Still, while we may be across the street from the beach, you should wear more than just your swimsuit.
+          </p>
+
+          <!-- <header>
+            <h2>Are there other wedding-related events I can attend?</h2>
+          </header>
+          <p>
+            Check out the <a href="{{ .Links.schedule }}">Schedule</a> for details about all wedding-related events.
+          </p> -->
+
+          <header>
+            <h2>Will the ceremony and reception be held indoors or outdoors?</h2>
+          </header>
+          <p>
+            Weather permitting, the ceremony will take place <strong>outdoors</strong>, on the Grand Hotel's sun deck,
+            overlooking the beach. We've made arrangements for an indoor ceremony if the weather doesn't cooperate.
+            The reception will take place <strong>indoors</strong>, in the atrium and ballroom.
+          </p>
+
+          <header>
+            <h2>What will the weather be like?</h2>
+          </header>
+          <p>
+            Hot and sunny, we hope! Early June in southern New Jersey typically falls in the low to mid-70s,
+            without much humidity.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section class="wrapper style4 special container medium">
+      <header class="special container">
+        <span class="icon solid fa-question-circle"></span>
+        <h2>Have another question?</h2>
+        <p>
+          We've done our best to cover everything, but nobody's perfect.
+          <br />
+          Use the form below to send us your question and we'll reply with an answer as soon as we can.
+        </p>
+      </header>
+
+      <div class="content">
+        <form id="question-form" action="#">
+          <div class="row gtr-50">
+            <div class="col-6 col-12-mobile">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                oninvalid="this.setCustomValidity('Please enter your name.')"
+                oninput="this.setCustomValidity('')"
+                required/>
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                oninvalid="this.setCustomValidity('Please enter an email address.')"
+                oninput="this.setCustomValidity('')"
+                required />
+            </div>
+            <div class="col-12">
+              <textarea name="question" placeholder="Will Freddy be there?!" rows="3" required></textarea>
+            </div>
+            <div class="col-12">
+              <ul class="buttons">
+                <li><input type="submit" class="special primary" value="Ask" /></li>
+              </ul>
+            </div>
+            <div class="message-container col-12">
+              <span class="message">Placeholder</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <script src="{{ .Assets.js }}form.js"></script>
+    </section>
+  </article>
+
+  {{ template "footer" . }}
+</body>
+</html>

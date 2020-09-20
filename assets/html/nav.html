@@ -1,0 +1,36 @@
+{{ define "nav" }}
+<header id="header">
+  <h1 id="logo"><a href="{{ .Links.home }}">#rhiphil <span>June 5, 2021</span></a></h1>
+  <nav id="nav">
+    <ul>
+      <li><a href="{{ .Links.home }}">Home</a></li>
+      <!-- <li class="submenu">
+        <a href="{{ .Links.schedule }}">Schedule</a>
+        <ul>
+          <li><a href="{{ .Links.schedule }}#ceremony">Ceremony</a></li>
+          <li><a href="{{ .Links.schedule }}#reception">Reception</a></li>
+        </ul>
+      </li> -->
+      <li><a href="{{ .Links.people }}">People</a></li>
+      <li><a href="{{ .Links.travel }}">Travel</a></li>
+      <!-- <li><a href="{{ .Links.registry }}">Registry</a></li> -->
+      <li><a href="{{ .Links.faq }}">FAQ</a></li>
+      <!-- <li><a href="{{ .Links.rsvp }}" class="button primary">RSVP</a></li> -->
+    </ul>
+  </nav>
+
+  <script>
+    (function(){
+      if (document.location.pathname === "/") {
+        $("#header").addClass("alt");
+      }
+
+      $("#nav > ul > li > a").each(function(_, $a) {
+        if ($a.pathname === document.location.pathname) {
+          $($a.parentElement).addClass("current");
+        }
+      });
+    })();
+  </script>
+</header>
+{{ end }}

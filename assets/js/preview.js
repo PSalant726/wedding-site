@@ -181,9 +181,7 @@
 			$message.classList.add('visible');
 
 			window.setTimeout(
-				function() {
-					$message._hide();
-				},
+				function() { $message._hide(); },
 				3000
 			);
 		};
@@ -202,6 +200,11 @@
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", "/preview", true);
 			xhr.onload = function(e) {
+				if (xhr.status != 200) {
+					$message._show('failure', 'Something went wrong. Please try again.');
+					return
+				}
+
 				$form.reset();
 				$submit.disabled = false;
 				$message._show('success', 'Thank you!');

@@ -1,11 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rhiannon & Phil's Wedding: {{ .Title }}</title>
-</head>
+{{ template "head" . }}
 <body>
+  {{ template "nav" . }}
 
+  <article id="main">
+    <header class="special container">
+      <span class="icon solid fa-envelope"></span>
+      <h2>RSVP</h2>
+      <p>We hope to see you there!</p>
+    </header>
+
+    <section class="wrapper style4 special container medium">
+      <p>
+        Please enter your first name, last name, and zip code exactly as they appear on your
+        invitation. If you're responding for yourself and one or more guests (or your family),
+        please include their name(s) in the field labeled "Guest(s)", and separate them with
+        commas. Otherwise, you may leave that field blank. If necessary, you may reuse this
+        form later to change your response.
+      </p>
+
+      <div class="content">
+        <form id="rsvp-form" action="#">
+          <div class="row gtr-50">
+            <div class="col-6 col-12-mobile">
+              <input
+                type="text"
+                name="fname"
+                title="Please enter your first name."
+                placeholder="First Name"
+                oninvalid="this.setCustomValidity('Please enter your first name.')"
+                oninput="this.setCustomValidity('')"
+                required />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input
+                type="text"
+                name="lname"
+                title="Please enter your last name."
+                placeholder="Last Name"
+                oninvalid="this.setCustomValidity('Please enter your last name.')"
+                oninput="this.setCustomValidity('')"
+                required />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input
+                type="email"
+                name="email"
+                title="Please enter your email address."
+                placeholder="Email"
+                oninvalid="this.setCustomValidity('Please enter an email address.')"
+                oninput="this.setCustomValidity('')"
+                required />
+            </div>
+            <div class="col-6 col-12-mobile">
+              <input
+                type="text"
+                name="zip"
+                title="Please enter the zip code to which your invitation was sent."
+                placeholder="Invitation Zip Code"
+                minlength="5"
+                maxlength="5"
+                oninvalid="this.setCustomValidity('Please enter the zip code to which your invitation was sent.')"
+                oninput="this.setCustomValidity('')"
+                required />
+            </div>
+            <div class="col-12">
+              <input
+                type="text"
+                name="guests"
+                placeholder="Guest(s)"
+                title="Please list the guests you plan to bring with you, but do not include yourself.
+                  If including more than one guest, this must be a comma-separated list of their first
+                  and last name(s) exactly as they appear on your invitation."
+                pattern="[\w\s.-]+(,[\w\s.-]+)*"
+                oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you, but do not include yourself. '
+                  + 'If including more than one guest, this must be a comma-separated list of their first '
+                  + 'and last name(s) exactly as they appear on your invitation.')"
+                oninput="this.setCustomValidity('')" />
+            </div>
+            <div class="col-12">
+              <textarea name="message" placeholder="Add a Message?" rows="3" maxlength="300"></textarea>
+            </div>
+            <div class="col-6 col-12-narrower">
+              <input
+                type="radio"
+                id="attending"
+                name="response"
+                title="Select this option if you and the specified guests will be attending."
+                required />
+              <label for="attending">Attending</label>
+            </div>
+            <div class="col-6 col-12-narrower">
+              <input
+                type="radio"
+                id="not-attending"
+                name="response"
+                title="Select this option if you will and the specified guests will not be attending."
+                required />
+              <label for="not-attending">Not Attending</label>
+            </div>
+            <div class="col-12">
+              <ul class="buttons">
+                <li><input type="submit" class="special primary" value="Submit RSVP" /></li>
+              </ul>
+            </div>
+            <div class="message-container col-12">
+              <span class="message">Placeholder</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <script src="{{ .Assets.js }}form.js"></script>
+    </section>
+  </article>
+
+  {{ template "footer" . }}
 </body>
 </html>

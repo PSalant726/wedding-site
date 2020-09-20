@@ -26,14 +26,14 @@ func NewGmailUser(username, password string) *EmailUser {
 				Link:        "https://www.rhiphilwedding.com",
 				Logo:        "https://raw.githubusercontent.com/PSalant726/wedding-site/master/assets/images/logo.png",
 				Copyright:   "Copyright © 2020 Phil Salant. All rights reserved.",
-				TroubleText: "Can't '{ACTION}'? Copy and paste this URL into your web browser instead:",
+				TroubleText: "Can't {ACTION}? Copy and paste this URL into your web browser instead:",
 			},
 			TextDirection: hermes.TDLeftToRight,
 		},
 	}
 }
 
-func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
+func (eu *EmailUser) SendSubscriberNotification(user string, isSubscribing bool) error {
 	var (
 		m       = gomail.NewMessage()
 		subject string
@@ -62,21 +62,41 @@ func (eu *EmailUser) SendNotification(user string, isSubscribing bool) error {
 	return nil
 }
 
-func (eu *EmailUser) SendHermesMessage(recipient, subject string, message hermes.Email) error {
-	m := gomail.NewMessage()
+func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question string) error {
+	var (
+		m    = gomail.NewMessage()
+		body = fmt.Sprintf("%s (%s) has asked the following question:\n\n%s", userName, userEmail, question)
+	)
 
-	plainText, _ := eu.Hermes.GeneratePlainText(message)
-	html, err := eu.Hermes.GenerateHTML(message)
+	m.SetBody("text/plain", body)
+	m.SetHeaders(map[string][]string{
+		"From":     {m.FormatAddress(eu.Username, "Wedding Guest Questions")},
+		"To":       {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
+		"Reply-To": {m.FormatAddress(userEmail, userName)},
+		"Subject":  {fmt.Sprintf("[Guest Question] %s has asked a question", userName)},
+	})
+
+	if err := eu.Dialer.DialAndSend(m); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (eu *EmailUser) SendHermesMessage(message Message) error {
+	plainText, _ := eu.Hermes.GeneratePlainText(message.Body)
+	html, err := eu.Hermes.GenerateHTML(message.Body)
 	if err != nil {
 		return err
 	}
 
+	m := gomail.NewMessage()
 	m.SetBody("text/plain", plainText)
 	m.AddAlternative("text/html", html)
 	m.SetHeaders(map[string][]string{
 		"From":    {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"To":      {m.FormatAddress(recipient, "")},
-		"Subject": {subject},
+		"To":      {m.FormatAddress(message.Recipient, "")},
+		"Subject": {message.Subject},
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
