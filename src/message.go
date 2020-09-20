@@ -18,14 +18,54 @@ func NewSubscriberThankYouMessage(recipient string) *Message {
 		Subject:   "Thanks for subscribing to updates about our wedding!",
 		Body: hermes.Email{
 			Body: hermes.Body{
-				Title:  "Thanks for subscribing to updates about our wedding!",
-				Intros: []string{"We're excited to start planning, and we'll let you know as soon as we have more details to share. In the meantime, join the conversation on social media with #rhiphil !"},
+				Title: "Thanks for subscribing to updates about our wedding!",
+				Intros: []string{
+					"We're excited to continue planning, and we'll let you know as soon as we have more details to share. " +
+						"In the meantime, join the conversation on social media with #rhiphil !",
+				},
 				Actions: []hermes.Action{
 					{
 						Instructions: "To unsubscribe, please click here:",
 						Button: hermes.Button{
-							Text: "Unsubscribe",
-							Link: "https://www.rhiphilwedding.com/unsubscribe?address=" + url.QueryEscape(recipient),
+							Color: "#331929",
+							Link:  "https://www.rhiphilwedding.com/unsubscribe?address=" + url.QueryEscape(recipient),
+							Text:  "Unsubscribe",
+						},
+					},
+				},
+				Outros:    []string{"Looking forward to seeing you there!"},
+				Signature: "Sincerely",
+			},
+		},
+	}
+}
+
+func NewSubscriberCommunicationMessage(name, recipient, messageText string) *Message {
+	return &Message{
+		Recipient: recipient,
+		Subject:   "Important information about Rhiannon & Phil's wedding!",
+		Body: hermes.Email{
+			Body: hermes.Body{
+				Name: name,
+				Intros: append(
+					[]string{"We have an update about our wedding, and we wanted you to be the first to know:"},
+					messageText,
+				),
+				Actions: []hermes.Action{
+					{
+						Button: hermes.Button{
+							Color: "#83D3C9",
+							Link:  "https://www.rhiphilwedding.com",
+							Text:  "Visit RhiPhilWedding.com",
+						},
+					},
+					{
+						Instructions: "You are receiving this message because you previously subscribed to receive updates " +
+							"about our wedding. To unsubscribe, please click here:",
+						Button: hermes.Button{
+							Color: "#331929",
+							Link:  "https://www.rhiphilwedding.com/unsubscribe?address=" + url.QueryEscape(recipient),
+							Text:  "Unsubscribe",
 						},
 					},
 				},
@@ -48,8 +88,9 @@ func NewUnsubscribeConfirmationMessage(address string) *Message {
 					{
 						Instructions: "To re-subscribe, please click here:",
 						Button: hermes.Button{
-							Text: "Subscribe",
-							Link: "https://www.rhiphilwedding.com/subscribe?address=" + url.QueryEscape(address),
+							Color: "#83D3C9",
+							Link:  "https://www.rhiphilwedding.com/subscribe?address=" + url.QueryEscape(address),
+							Text:  "Subscribe",
 						},
 					},
 				},

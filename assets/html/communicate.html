@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ template "head" . }}
+
+<body>
+  {{ template "nav" . }}
+
+  <article id="main">
+    <header class="special container">
+      <span class="icon solid fa-user-lock"></span>
+      <h2>Email Subscribers</h2>
+    </header>
+
+    <section class="wrapper style4 special container medium">
+      <p>
+        This form will send a message to the subscriber list. Separate all email addresses and
+        names with comma characters, and do not use spaces. The email addresses and names should
+        be listed in the same order in both fields, such that the first email address corresponds
+        to the first name, the second to the second, etc.
+      </p>
+
+      <div class="content">
+        <form id="comm-form" action="#">
+          <div class="row gtr-50">
+            <div class="col-12">
+              <input type="text" name="emailAddresses" placeholder="Email Addresses" required />
+            </div>
+            <div class="col-12">
+              <input type="text" name="names" placeholder="First Names" required />
+            </div>
+            <div class="col-12">
+              <textarea name="message" placeholder="Add a Message" rows="10" required></textarea>
+            </div>
+            <div class="col-12">
+              <input type="password" name="password" placeholder="Admin Password" required />
+            </div>
+            <div class="col-12">
+              <ul class="buttons">
+                <li><input type="submit" class="special primary" value="Send Communication" /></li>
+              </ul>
+            </div>
+            <div class="message-container col-12">
+              <span class="message">Placeholder</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <script src="{{ .Assets.js }}form.js"></script>
+    </section>
+  </article>
+
+  {{ template "footer" . }}
+</body>
+
+</html>

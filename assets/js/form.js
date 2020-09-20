@@ -20,16 +20,30 @@
       errorResponseMessage: function (xhr) { return xhr.response; },
       serverErrorMessage: 'Something went wrong. Please try again.',
       successMessage: 'Thank you for your RSVP!'
+    },
+    admin: {
+      selector: '#comm-form',
+      endpoint: '/communicate',
+      errorResponseMessage: function (xhr) { return xhr.response; },
+      serverErrorMessage: 'Something went wrong. Please try again.',
+      successMessage: 'Success!'
     }
   };
 
   var form;
-  if ($('#signup-form').length) {
-    form = forms.signup;
-  } else if ($('#question-form').length) {
-    form = forms.question;
-  } else if ($('#rsvp-form').length) {
-    form = forms.rsvp;
+  switch ($('form')[0].id) {
+    case 'signup-form':
+      form = forms.signup;
+      break;
+    case 'question-form':
+      form = forms.question;
+      break;
+    case 'rsvp-form':
+      form = forms.rsvp;
+      break;
+    case 'comm-form':
+      form = forms.admin;
+      break;
   }
 
   var $form = $(form.selector)[0];

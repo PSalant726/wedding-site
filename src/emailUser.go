@@ -105,3 +105,14 @@ func (eu *EmailUser) SendHermesMessage(message Message) error {
 
 	return nil
 }
+
+func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]string, communication string) error {
+	for emailAddress, name := range subscriberList {
+		msg := *NewSubscriberCommunicationMessage(name, emailAddress, communication)
+		if err := eu.SendHermesMessage(msg); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
