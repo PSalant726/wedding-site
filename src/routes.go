@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"text/template"
 
 	"github.com/gorilla/mux"
@@ -12,6 +13,7 @@ import (
 
 const (
 	PathAbout       = "/about"
+	PathComm        = "/communicate"
 	PathFAQ         = "/faq"
 	PathHealth      = "/health"
 	PathHome        = "/"
@@ -49,6 +51,7 @@ func NewRouterWithRoutes() *mux.Router {
 
 	// GET requests
 	get.Use(logRequest)
+	get.HandleFunc(PathComm, makeHandler(PathComm))
 	get.HandleFunc(PathHome, makeHandler(PathAbout))
 	get.HandleFunc(PathPeople, makeHandler(PathPeople))
 	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
@@ -65,6 +68,7 @@ func NewRouterWithRoutes() *mux.Router {
 
 	// POST requests
 	post.Use(logRequest)
+	post.HandleFunc(PathComm, commHandler)
 	post.HandleFunc(PathPreview, subscribeHandler)
 	post.HandleFunc(PathQuestion, questionHandler)
 	post.HandleFunc(PathRSVP, rsvpHandler)
@@ -97,6 +101,30 @@ func previewHandler(w http.ResponseWriter, r *http.Request) {
 	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
+	}
+}
+
+func commHandler(w http.ResponseWriter, r *http.Request) {
+	if pwd := r.FormValue("password"); pwd != os.Getenv("COMM_PASSWORD") {
+		http.Error(w, "Incorrect Password", http.StatusUnauthorized)
+		return
+	}
+
+	var (
+		message          = r.FormValue("message")
+		subscriberEmails = strings.Split(r.FormValue("emailAddresses"), ",")
+		subscriberNames  = strings.Split(r.FormValue("names"), ",")
+		subscriberList   = make(map[string]string)
+	)
+
+	for i, emailAddress := range subscriberEmails {
+		subscriberList[emailAddress] = subscriberNames[i]
+	}
+
+	if err := emailSender.SendSubscriberCommunication(subscriberList, message); err != nil {
+		http.Error(w, "Failed to send communication", http.StatusInternalServerError)
+		log.Println(err)
+		return
 	}
 }
 

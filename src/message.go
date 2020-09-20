@@ -40,6 +40,42 @@ func NewSubscriberThankYouMessage(recipient string) *Message {
 	}
 }
 
+func NewSubscriberCommunicationMessage(name, recipient, messageText string) *Message {
+	return &Message{
+		Recipient: recipient,
+		Subject:   "Important information about Rhiannon & Phil's wedding!",
+		Body: hermes.Email{
+			Body: hermes.Body{
+				Name: name,
+				Intros: append(
+					[]string{"We have an update about our wedding, and we wanted you to be the first to know:"},
+					messageText,
+				),
+				Actions: []hermes.Action{
+					{
+						Button: hermes.Button{
+							Color: "#83D3C9",
+							Link:  "https://www.rhiphilwedding.com",
+							Text:  "Visit RhiPhilWedding.com",
+						},
+					},
+					{
+						Instructions: "You are receiving this message because you previously subscribed to receive updates " +
+							"about our wedding. To unsubscribe, please click here:",
+						Button: hermes.Button{
+							Color: "#331929",
+							Link:  "https://www.rhiphilwedding.com/unsubscribe?address=" + url.QueryEscape(recipient),
+							Text:  "Unsubscribe",
+						},
+					},
+				},
+				Outros:    []string{"Looking forward to seeing you there!"},
+				Signature: "Sincerely",
+			},
+		},
+	}
+}
+
 func NewUnsubscribeConfirmationMessage(address string) *Message {
 	return &Message{
 		Recipient: address,
