@@ -85,6 +85,7 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 
 func (eu *EmailUser) SendHermesMessage(message Message) error {
 	plainText, _ := eu.Hermes.GeneratePlainText(message.Body)
+
 	html, err := eu.Hermes.GenerateHTML(message.Body)
 	if err != nil {
 		return err

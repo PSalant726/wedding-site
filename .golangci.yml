@@ -1,0 +1,15 @@
+linters:
+  enable-all: true
+  disable:
+  - interfacer
+  - gochecknoglobals
+  - gomnd
+  - lll
+  - nlreturn
+
+run:
+  skip-dirs:
+  - .ebextensions
+  - .elasticbeanstalk
+  - assets
+  - bin
