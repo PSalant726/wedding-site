@@ -56,7 +56,7 @@ func (eu *EmailUser) SendSubscriberNotification(user string, isSubscribing bool)
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return err
+		return fmt.Errorf("failed to send subscriber notification: %w", err)
 	}
 
 	return nil
@@ -77,7 +77,7 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return err
+		return fmt.Errorf("failed to send question notification: %w", err)
 	}
 
 	return nil
@@ -85,9 +85,10 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 
 func (eu *EmailUser) SendHermesMessage(message Message) error {
 	plainText, _ := eu.Hermes.GeneratePlainText(message.Body)
+
 	html, err := eu.Hermes.GenerateHTML(message.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to generate HTML for message: %w", err)
 	}
 
 	m := gomail.NewMessage()
@@ -100,7 +101,7 @@ func (eu *EmailUser) SendHermesMessage(message Message) error {
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return err
+		return fmt.Errorf("failed to send Hermes message: %w", err)
 	}
 
 	return nil

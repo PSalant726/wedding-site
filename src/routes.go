@@ -91,7 +91,7 @@ func makeHandler(path string) http.HandlerFunc {
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	templateFile := fmt.Sprintf("%s.html", tmpl)[1:]
 	if err := templates.ExecuteTemplate(w, templateFile, p); err != nil {
-		return err
+		return fmt.Errorf("failed to execute template for file '%s': %w", templateFile, err)
 	}
 
 	return nil
@@ -124,6 +124,7 @@ func commHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendSubscriberCommunication(subscriberList, message); err != nil {
 		http.Error(w, "Failed to send communication", http.StatusInternalServerError)
 		log.Println(err)
+
 		return
 	}
 }
@@ -176,6 +177,7 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
 		redirectHome(w, r)
+
 		return
 	}
 
@@ -184,6 +186,7 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
 		redirectHome(w, r)
+
 		return
 	}
 
@@ -200,6 +203,7 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendQuestionNotification(senderName, senderEmail, question); err != nil {
 		http.Error(w, "Failed to notify Phil & Rhiannon about your question. Please try again.", http.StatusInternalServerError)
 		log.Println(err)
+
 		return
 	}
 
