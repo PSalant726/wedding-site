@@ -1,4 +1,7 @@
 bin/
+Makefile
+.leaf.yml
+.subscribers.txt
 .DS_Store
 
 # Elastic Beanstalk Files
