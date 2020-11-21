@@ -91,7 +91,7 @@ func makeHandler(path string) http.HandlerFunc {
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	templateFile := fmt.Sprintf("%s.html", tmpl)[1:]
 	if err := templates.ExecuteTemplate(w, templateFile, p); err != nil {
-		return err
+		return fmt.Errorf("failed to execute template for file '%s': %w", templateFile, err)
 	}
 
 	return nil
