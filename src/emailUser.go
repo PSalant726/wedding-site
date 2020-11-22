@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/matcornic/hermes/v2"
 	"gopkg.in/gomail.v2"
@@ -83,12 +84,12 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 	return nil
 }
 
-func (eu *EmailUser) SendHermesMessage(message Message) error {
+func (eu *EmailUser) GetGomailMessage(message Message) (*gomail.Message, error) {
 	plainText, _ := eu.Hermes.GeneratePlainText(message.Body)
 
 	html, err := eu.Hermes.GenerateHTML(message.Body)
 	if err != nil {
-		return fmt.Errorf("failed to generate HTML for message: %w", err)
+		return nil, fmt.Errorf("failed to generate HTML for message: %w", err)
 	}
 
 	m := gomail.NewMessage()
@@ -100,18 +101,39 @@ func (eu *EmailUser) SendHermesMessage(message Message) error {
 		"Subject": {message.Subject},
 	})
 
+	return m, nil
+}
+
+func (eu *EmailUser) SendHermesMessage(message Message) error {
+	m, err := eu.GetGomailMessage(message)
+	if err != nil {
+		return err
+	}
+
 	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return fmt.Errorf("failed to send Hermes message: %w", err)
+		return fmt.Errorf("failed to send message: %w", err)
 	}
 
 	return nil
 }
 
 func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]string, communication string) error {
+	sender, err := eu.Dialer.Dial()
+	if err != nil {
+		return fmt.Errorf("failed to authenticate with email server: %w", err)
+	}
+	defer sender.Close()
+
 	for emailAddress, name := range subscriberList {
-		msg := *NewSubscriberCommunicationMessage(name, emailAddress, communication)
-		if err := eu.SendHermesMessage(msg); err != nil {
-			return err
+		message, err := eu.GetGomailMessage(*NewSubscriberCommunicationMessage(name, emailAddress, communication))
+		if err != nil {
+			log.Printf("Failed to create message for %s: %v", emailAddress, err)
+			continue
+		}
+
+		if err := gomail.Send(sender, message); err != nil {
+			log.Printf("Failed to send message to %s: %v", emailAddress, err)
+			continue
 		}
 	}
 
