@@ -10,8 +10,8 @@ func main() {
 	server := &http.Server{
 		Handler:      NewRouterWithRoutes(),
 		Addr:         ":5000",
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		WriteTimeout: time.Minute,
+		ReadTimeout:  time.Minute,
 	}
 
 	log.Fatal(server.ListenAndServe())
