@@ -23,23 +23,14 @@
       <div class="content">
         <form id="rsvp-form" action="#">
           <div class="row gtr-50">
-            <div class="col-6 col-12-mobile">
+            <div class="col-12">
               <input
                 type="text"
-                name="fname"
-                title="Please enter your first name."
-                placeholder="First Name"
-                oninvalid="this.setCustomValidity('Please enter your first name.')"
-                oninput="this.setCustomValidity('')"
-                required />
-            </div>
-            <div class="col-6 col-12-mobile">
-              <input
-                type="text"
-                name="lname"
-                title="Please enter your last name."
-                placeholder="Last Name"
-                oninvalid="this.setCustomValidity('Please enter your last name.')"
+                name="name"
+                title="Please enter your first and last name."
+                pattern=".*\s.*"
+                placeholder="Full Name"
+                oninvalid="this.setCustomValidity('Please enter your first and last name.')"
                 oninput="this.setCustomValidity('')"
                 required />
             </div>
@@ -57,11 +48,11 @@
               <input
                 type="text"
                 name="zip"
-                title="Please enter the zip code to which your invitation was sent."
+                title="For verification, please enter the zip code to which your invitation was sent."
                 placeholder="Invitation Zip Code"
                 minlength="5"
                 maxlength="5"
-                oninvalid="this.setCustomValidity('Please enter the zip code to which your invitation was sent.')"
+                oninvalid="this.setCustomValidity('For verification, please enter the zip code to which your invitation was sent.')"
                 oninput="this.setCustomValidity('')"
                 required />
             </div>
@@ -70,13 +61,11 @@
                 type="text"
                 name="guests"
                 placeholder="Guest(s)"
-                title="Please list the guests you plan to bring with you, but do not include yourself.
-                  If including more than one guest, this must be a comma-separated list of their first
-                  and last name(s) exactly as they appear on your invitation."
+                title="Please list the guests you plan to bring with you. If including more than one guest, this must be a comma-separated list of their full names exactly as they appear on your invitation."
                 pattern="[\w\s.-]+(,[\w\s.-]+)*"
-                oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you, but do not include yourself. '
-                  + 'If including more than one guest, this must be a comma-separated list of their first '
-                  + 'and last name(s) exactly as they appear on your invitation.')"
+                oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you. '
+                  + 'If including more than one guest, this must be a comma-separated list of their full '
+                  + 'names exactly as they appear on your invitation.')"
                 oninput="this.setCustomValidity('')" />
             </div>
             <div class="col-12">
@@ -87,7 +76,7 @@
                 type="radio"
                 id="attending"
                 name="response"
-                title="Select this option if you and the specified guests will be attending."
+                title="Select this option if you and the specified guest(s) will be attending."
                 required />
               <label for="attending">Attending</label>
             </div>
@@ -96,7 +85,7 @@
                 type="radio"
                 id="not-attending"
                 name="response"
-                title="Select this option if you will and the specified guests will not be attending."
+                title="Select this option if you will and the specified guest(s) will not be attending."
                 required />
               <label for="not-attending">Not Attending</label>
             </div>
