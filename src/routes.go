@@ -80,7 +80,7 @@ func NewRouterWithRoutes() *mux.Router {
 func makeHandler(path string) http.HandlerFunc {
 	p := NewPage(path)
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		if err := renderTemplate(w, path, p); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println(err)
@@ -97,7 +97,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	return nil
 }
 
-func previewHandler(w http.ResponseWriter, r *http.Request) {
+func previewHandler(w http.ResponseWriter, _ *http.Request) {
 	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
@@ -214,7 +214,7 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func rsvpHandler(w http.ResponseWriter, r *http.Request) {
+func rsvpHandler(w http.ResponseWriter, _ *http.Request) {
 	http.Error(w, "Endpoint not configured", http.StatusInternalServerError)
 }
 

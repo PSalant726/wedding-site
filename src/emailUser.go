@@ -124,6 +124,8 @@ func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]strin
 	}
 	defer sender.Close()
 
+	var successfulSends int
+
 	for emailAddress, name := range subscriberList {
 		message, err := eu.GetGomailMessage(*NewSubscriberCommunicationMessage(name, emailAddress, communication))
 		if err != nil {
@@ -135,7 +137,11 @@ func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]strin
 			log.Printf("Failed to send message to %s: %v", emailAddress, err)
 			continue
 		}
+
+		successfulSends++
 	}
+
+	log.Printf("Successfully sent messages to %d of %d subscribers", successfulSends, len(subscriberList))
 
 	return nil
 }
