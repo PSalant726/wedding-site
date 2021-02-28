@@ -114,7 +114,7 @@ func commHandler(w http.ResponseWriter, r *http.Request) {
 		message          = r.FormValue("message")
 		subscriberEmails = strings.Split(r.FormValue("emailAddresses"), ",")
 		subscriberNames  = strings.Split(r.FormValue("names"), ",")
-		subscriberList   = make(map[string]string)
+		subscriberList   = make(map[string]string, len(subscriberEmails))
 	)
 
 	for i, emailAddress := range subscriberEmails {
@@ -124,8 +124,6 @@ func commHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendSubscriberCommunication(subscriberList, message); err != nil {
 		http.Error(w, "Failed to send communication", http.StatusInternalServerError)
 		log.Println(err)
-
-		return
 	}
 }
 
@@ -157,12 +155,6 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
 		log.Println(err)
-
-		if redirect {
-			redirectHome(w, r)
-		}
-
-		return
 	}
 
 	if redirect {
@@ -185,9 +177,6 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
-		redirectHome(w, r)
-
-		return
 	}
 
 	redirectHome(w, r)
