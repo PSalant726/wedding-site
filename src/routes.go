@@ -21,6 +21,7 @@ const (
 	PathPreview     = "/preview"
 	PathQuestion    = "/question"
 	PathRegistry    = "/registry"
+	PathRehearsal   = "/rehearsal"
 	PathRSVP        = "/rsvp"
 	PathSchedule    = "/schedule"
 	PathSubscribe   = "/subscribe"
@@ -56,6 +57,7 @@ func NewRouterWithRoutes() *mux.Router {
 	get.HandleFunc(PathPeople, makeHandler(PathPeople))
 	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
 	get.HandleFunc(PathRegistry, makeHandler(PathRegistry))
+	get.HandleFunc(PathRehearsal, makeHandler(PathRehearsal))
 	get.HandleFunc(PathRSVP, makeHandler(PathRSVP))
 	get.HandleFunc(PathSchedule, makeHandler(PathSchedule))
 	get.HandleFunc(PathTravel, makeHandler(PathTravel))
