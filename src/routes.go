@@ -221,6 +221,19 @@ func rsvpHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+
+	if err := emailSender.SendRSVPNotification(rsvp); err != nil {
+		http.Error(w, "Failed to notify Phil & Rhiannon about your RSVP. Please try again.", http.StatusInternalServerError)
+		log.Println(err)
+
+		return
+	}
+
+	msg := *NewRSVPConfirmationMessage(rsvp)
+	if err := emailSender.SendHermesMessage(msg); err != nil {
+		http.Error(w, "Failed to confirm receipt of your RSVP. Please try again", http.StatusInternalServerError)
+		log.Println(err)
+	}
 }
 
 func redirectHome(w http.ResponseWriter, r *http.Request) {

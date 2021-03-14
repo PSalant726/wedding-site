@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/url"
+	"strings"
 
 	"github.com/matcornic/hermes/v2"
 )
@@ -113,17 +114,94 @@ func NewQuestionReceivedMessage(userName, userEmail, question string) *Message {
 						"Keep an eye on your inbox for an answer; we'll get back to you as soon as we can.",
 				},
 				Dictionary: []hermes.Entry{
-					{
-						Key:   "You Asked",
-						Value: question,
+					{Key: "You Asked", Value: question},
+					{Key: "We'll send our answer to", Value: userEmail},
+				},
+				Signature: "Sincerely",
+			},
+		},
+	}
+}
+
+func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
+	guests := strings.Join(rsvp.Guests, ", ")
+	if guests == "" {
+		guests = "None"
+	}
+
+	msg := &Message{
+		Recipient: rsvp.Email,
+		Subject:   "Thanks for your RSVP!",
+		Body: hermes.Email{
+			Body: hermes.Body{
+				Name:   strings.Split(rsvp.Name, " ")[0],
+				Intros: []string{"This email confirms that your RSVP has been received, thanks!"},
+				Table: hermes.Table{
+					Data: [][]hermes.Entry{
+						{
+							{Key: "Field", Value: "Name"},
+							{Key: "Your Reply:", Value: rsvp.Name},
+						},
+						{
+							{Key: "Field", Value: "Guests"},
+							{Key: "Your Reply:", Value: guests},
+						},
+						{
+							{Key: "Field", Value: "Message"},
+							{Key: "Your Reply:", Value: rsvp.Message},
+						},
+						{{Key: "Field", Value: "Attending"}},
 					},
+					Columns: hermes.Columns{
+						CustomWidth: map[string]string{"Field": "20%"},
+					},
+				},
+				Actions: []hermes.Action{
 					{
-						Key:   "We'll send our answer to",
-						Value: userEmail,
+						Instructions: "Need to change your response? You can do that anytime by clicking here:",
+						Button: hermes.Button{
+							Color: "#83D3C9",
+							Link:  "https://www.rhiphilwedding.com/rsvp",
+							Text:  "Change your RSVP",
+						},
 					},
 				},
 				Signature: "Sincerely",
 			},
 		},
 	}
+
+	detail := "We're sorry to hear you won't be able to join us, " +
+		"but we hope to be able to catch up soon. If things change, " +
+		"and it turns out you can be there, you can always change your " +
+		"response using the link below."
+	isAttending := hermes.Entry{Key: "Your Reply:", Value: "No"}
+
+	if rsvp.Attending {
+		detail = "We're glad to hear you can make it! There's nothing more you need to do, " +
+			"we've received your RSVP and you're on the list. " +
+			"We can't wait to celebrate with you on June 5th!"
+
+		isAttending = hermes.Entry{Key: "Your Reply:", Value: "Yes!"}
+		msg.Body.Body.Outros = []string{"We're looking forward to seeing you there!"}
+		msg.Body.Body.Actions = append(
+			msg.Body.Body.Actions,
+			hermes.Action{
+				Instructions: "Need to book a place to stay? " +
+					"Get more information about travel and accommodations here:",
+				Button: hermes.Button{
+					Color: "#331929",
+					Link:  "https://www.rhiphilwedding.com/travel",
+					Text:  "Get Traveler Information",
+				},
+			},
+		)
+	}
+
+	msg.Body.Body.Intros = append(msg.Body.Body.Intros, detail, "Here's how you replied:")
+	msg.Body.Body.Table.Data[len(msg.Body.Body.Table.Data)-1] = append(
+		msg.Body.Body.Table.Data[len(msg.Body.Body.Table.Data)-1], isAttending,
+	)
+
+	return msg
 }
