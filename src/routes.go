@@ -21,6 +21,7 @@ const (
 	PathPreview     = "/preview"
 	PathQuestion    = "/question"
 	PathRegistry    = "/registry"
+	PathRehearsal   = "/rehearsal"
 	PathRSVP        = "/rsvp"
 	PathSchedule    = "/schedule"
 	PathSubscribe   = "/subscribe"
@@ -56,6 +57,7 @@ func NewRouterWithRoutes() *mux.Router {
 	get.HandleFunc(PathPeople, makeHandler(PathPeople))
 	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
 	get.HandleFunc(PathRegistry, makeHandler(PathRegistry))
+	get.HandleFunc(PathRehearsal, makeHandler(PathRehearsal))
 	get.HandleFunc(PathRSVP, makeHandler(PathRSVP))
 	get.HandleFunc(PathSchedule, makeHandler(PathSchedule))
 	get.HandleFunc(PathTravel, makeHandler(PathTravel))
@@ -114,7 +116,7 @@ func commHandler(w http.ResponseWriter, r *http.Request) {
 		message          = r.FormValue("message")
 		subscriberEmails = strings.Split(r.FormValue("emailAddresses"), ",")
 		subscriberNames  = strings.Split(r.FormValue("names"), ",")
-		subscriberList   = make(map[string]string)
+		subscriberList   = make(map[string]string, len(subscriberEmails))
 	)
 
 	for i, emailAddress := range subscriberEmails {
@@ -124,8 +126,6 @@ func commHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendSubscriberCommunication(subscriberList, message); err != nil {
 		http.Error(w, "Failed to send communication", http.StatusInternalServerError)
 		log.Println(err)
-
-		return
 	}
 }
 
@@ -157,12 +157,6 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to subscribe address: "+subscriber, http.StatusInternalServerError)
 		log.Println(err)
-
-		if redirect {
-			redirectHome(w, r)
-		}
-
-		return
 	}
 
 	if redirect {
@@ -185,9 +179,6 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
 		log.Println(err)
-		redirectHome(w, r)
-
-		return
 	}
 
 	redirectHome(w, r)
@@ -214,8 +205,35 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func rsvpHandler(w http.ResponseWriter, _ *http.Request) {
-	http.Error(w, "Endpoint not configured", http.StatusInternalServerError)
+func rsvpHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(r.ContentLength)
+	if err != nil {
+		http.Error(w, "An error occurred. Please try again.", http.StatusInternalServerError)
+		log.Println(err)
+
+		return
+	}
+
+	rsvp := NewRSVP(r.Form)
+	if err := rsvp.Validate(); err != nil {
+		http.Error(w, fmt.Sprintf("Failed to RSVP: %s", err), http.StatusForbidden)
+		log.Printf("Validation failed for RSVP: %+v. Error: %s", rsvp, err)
+
+		return
+	}
+
+	if err := emailSender.SendRSVPNotification(rsvp); err != nil {
+		http.Error(w, "Failed to notify Phil & Rhiannon about your RSVP. Please try again.", http.StatusInternalServerError)
+		log.Println(err)
+
+		return
+	}
+
+	msg := *NewRSVPConfirmationMessage(rsvp)
+	if err := emailSender.SendHermesMessage(msg); err != nil {
+		http.Error(w, "Failed to confirm receipt of your RSVP. Please try again", http.StatusInternalServerError)
+		log.Println(err)
+	}
 }
 
 func redirectHome(w http.ResponseWriter, r *http.Request) {

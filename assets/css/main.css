@@ -2308,6 +2308,14 @@ input, select, textarea {
 			padding: 0.5em 0;
 		}
 
+		input[type="button"].disabled,
+		input[type="submit"].disabled,
+		input[type="reset"].disabled,
+		button.disabled,
+		.button.disabled {
+			opacity: 0.5;
+		}
+
 /* Wrapper */
 
 	.wrapper {

@@ -8,6 +8,7 @@ require (
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect
+	github.com/fabioberger/airtable-go v1.0.0
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/mux v1.7.4
 	github.com/huandu/xstrings v1.3.2 // indirect

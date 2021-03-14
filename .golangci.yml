@@ -4,9 +4,25 @@ linters:
   - exhaustivestruct
   - interfacer
   - gochecknoglobals
+  - goerr113
   - gomnd
   - lll
   - nlreturn
+
+issues:
+  exclude-rules:
+    - linters:
+      - stylecheck
+      text: "ST1005: error strings should not be capitalized"
+
+    - linters:
+      - stylecheck
+      text: "ST1005: error strings should not end with punctuation or a newline"
+
+    - linters:
+      - golint
+      - revive
+      text: "error strings should not be capitalized or end with punctuation or a newline"
 
 run:
   skip-dirs:

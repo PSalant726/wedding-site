@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/matcornic/hermes/v2"
 	"gopkg.in/gomail.v2"
@@ -79,6 +80,33 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {
 		return fmt.Errorf("failed to send question notification: %w", err)
+	}
+
+	return nil
+}
+
+func (eu *EmailUser) SendRSVPNotification(rsvp RSVP) error {
+	var (
+		m    = gomail.NewMessage()
+		body = fmt.Sprintf(
+			"%s has RSVP-ed!\n\nEmail:\n%s\n\nGuests:\n%s\n\nAttending:\n%t\n\nMessage:\n%s",
+			rsvp.Name,
+			rsvp.Email,
+			strings.Join(rsvp.Guests, ", "),
+			rsvp.Attending,
+			rsvp.Message,
+		)
+	)
+
+	m.SetBody("text/plain", body)
+	m.SetHeaders(map[string][]string{
+		"From":    {m.FormatAddress(eu.Username, "Wedding RSVP's")},
+		"To":      {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
+		"Subject": {fmt.Sprintf("[RSVP] %s has RSVP-ed!", rsvp.Name)},
+	})
+
+	if err := eu.Dialer.DialAndSend(m); err != nil {
+		return fmt.Errorf("failed to send RSVP notification: %w", err)
 	}
 
 	return nil
