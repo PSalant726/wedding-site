@@ -205,8 +205,22 @@ func questionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func rsvpHandler(w http.ResponseWriter, _ *http.Request) {
-	http.Error(w, "Endpoint not configured", http.StatusInternalServerError)
+func rsvpHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(r.ContentLength)
+	if err != nil {
+		http.Error(w, "An error occurred. Please try again.", http.StatusInternalServerError)
+		log.Println(err)
+
+		return
+	}
+
+	rsvp := NewRSVP(r.Form)
+	if err := rsvp.Validate(); err != nil {
+		http.Error(w, fmt.Sprintf("Failed to RSVP: %s", err), http.StatusForbidden)
+		log.Printf("Validation failed for RSVP: %+v. Error: %s", rsvp, err)
+
+		return
+	}
 }
 
 func redirectHome(w http.ResponseWriter, r *http.Request) {
