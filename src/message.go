@@ -103,7 +103,7 @@ func NewUnsubscribeConfirmationMessage(address string) *Message {
 func NewQuestionReceivedMessage(userName, userEmail, question string) *Message {
 	return &Message{
 		Recipient: userEmail,
-		Subject:   "We've received your question",
+		Subject:   "We've received your question.",
 		Body: hermes.Email{
 			Body: hermes.Body{
 				Name: userName,
