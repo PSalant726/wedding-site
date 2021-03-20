@@ -7,7 +7,6 @@ import (
 	"net/mail"
 	"net/url"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/fabioberger/airtable-go"
@@ -24,7 +23,7 @@ var (
 type RSVP struct {
 	Name      string
 	Email     string
-	Zip       int
+	Zip       string
 	Guests    []string
 	Message   string
 	Attending bool
@@ -45,14 +44,10 @@ type guest struct {
 func NewRSVP(response url.Values) RSVP {
 	rsvp := &RSVP{
 		Name:      strings.TrimSpace(strings.Title(template.HTMLEscapeString(response.Get("name")))),
+		Zip:       strings.TrimSpace(template.HTMLEscapeString(response.Get("zip"))),
 		Guests:    parseGuests(template.HTMLEscapeString(response.Get("guests"))),
 		Message:   strings.TrimSpace(template.HTMLEscapeString(response.Get("message"))),
 		Attending: response.Get("response") == "1",
-	}
-
-	zip, err := strconv.Atoi(response.Get("zip"))
-	if err == nil {
-		rsvp.Zip = zip
 	}
 
 	email, err := mail.ParseAddress(template.HTMLEscapeString(response.Get("email")))
@@ -68,7 +63,7 @@ func (r RSVP) Validate() error {
 		responders = make([]guest, 0)
 		listParams = airtable.ListParameters{
 			Fields:          []string{"Guest", "ZIP"},
-			FilterByFormula: fmt.Sprintf("AND(LOWER({Guest}) = '%s', {ZIP} = '%d')", strings.ToLower(r.Name), r.Zip),
+			FilterByFormula: fmt.Sprintf("AND(LOWER({Guest}) = '%s', {ZIP} = '%s')", strings.ToLower(r.Name), r.Zip),
 			MaxRecords:      5,
 		}
 	)
