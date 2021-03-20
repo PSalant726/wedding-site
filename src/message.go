@@ -129,6 +129,11 @@ func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
 		guests = "None"
 	}
 
+	message := rsvp.Message
+	if message == "" {
+		message = "None"
+	}
+
 	msg := &Message{
 		Recipient: rsvp.Email,
 		Subject:   "Thanks for your RSVP!",
@@ -148,17 +153,17 @@ func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
 						},
 						{
 							{Key: "Field", Value: "Message"},
-							{Key: "Your Reply:", Value: rsvp.Message},
+							{Key: "Your Reply:", Value: message},
 						},
 						{{Key: "Field", Value: "Attending"}},
 					},
 					Columns: hermes.Columns{
-						CustomWidth: map[string]string{"Field": "20%"},
+						CustomWidth: map[string]string{"Field": "25%"},
 					},
 				},
 				Actions: []hermes.Action{
 					{
-						Instructions: "Need to change your response? You can do that anytime by clicking here:",
+						Instructions: "Need to change your response? You can do that any time through April 30th by clicking here:",
 						Button: hermes.Button{
 							Color: "#83D3C9",
 							Link:  "https://www.rhiphilwedding.com/rsvp",
@@ -173,13 +178,13 @@ func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
 
 	detail := "We're sorry to hear you won't be able to join us, " +
 		"but we hope to be able to catch up soon. If things change, " +
-		"and it turns out you can be there, you can always change your " +
-		"response using the link below."
+		"and it turns out you can be there, you can change your " +
+		"response any time through April 30th using the link below."
 	isAttending := hermes.Entry{Key: "Your Reply:", Value: "No"}
 
 	if rsvp.Attending {
-		detail = "We're glad to hear you can make it! There's nothing more you need to do, " +
-			"we've received your RSVP and you're on the list. " +
+		detail = "We're glad to hear you can make it! " +
+			"There's nothing more you need to do. " +
 			"We can't wait to celebrate with you on June 5th!"
 
 		isAttending = hermes.Entry{Key: "Your Reply:", Value: "Yes!"}
