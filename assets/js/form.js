@@ -20,11 +20,20 @@
     },
     rsvp: {
       selector: '#rsvp-form',
-      endpoint: '/rsvp',
+      endpoint: '/rsvp?rehearsal=false',
       errorResponseMessage: function (xhr) { return xhr.response; },
       serverErrorMessage: 'Something went wrong. Please try again.',
       successMessage: 'Success! Thanks for your reply!',
       availableText: "Submit RSVP",
+      waitingText: "Submitting...",
+    },
+    rehearsalRsvp: {
+      selector: '#rehearsal-rsvp-form',
+      endpoint: '/rsvp?rehearsal=true',
+      errorResponseMessage: function(xhr) { return xhr.response; },
+      serverErrorMessage: 'Something went wrong. Please try again.',
+      successMessage: 'Success! Thanks for your reply!',
+      availableText: "Submit Rehearsal RSVP",
       waitingText: "Submitting...",
     },
     admin: {
@@ -48,6 +57,9 @@
       break;
     case 'rsvp-form':
       form = forms.rsvp;
+      break;
+    case 'rehearsal-rsvp-form':
+      form = forms.rehearsalRsvp;
       break;
     case 'comm-form':
       form = forms.admin;
