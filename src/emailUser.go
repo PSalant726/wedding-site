@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/mail"
 	"strings"
 
 	"github.com/matcornic/hermes/v2"
@@ -33,91 +34,6 @@ func NewGmailUser(username, password string) *EmailUser {
 			TextDirection: hermes.TDLeftToRight,
 		},
 	}
-}
-
-func (eu *EmailUser) SendSubscriberNotification(user string, isSubscribing bool) error {
-	var (
-		m       = gomail.NewMessage()
-		subject string
-		body    string
-	)
-
-	if isSubscribing {
-		subject = fmt.Sprintf("[Wedding Details] %s has subscribed", user)
-		body = fmt.Sprintf("%s has subscribed to receive updates about wedding details.", user)
-	} else {
-		subject = fmt.Sprintf("[Wedding Details][Unsubscribe] %s has unsubscribed", user)
-		body = fmt.Sprintf("%s has unsubscribed from updates about wedding details.", user)
-	}
-
-	m.SetBody("text/plain", body)
-	m.SetHeaders(map[string][]string{
-		"From":    {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"To":      {m.FormatAddress(eu.Username, "Subscriber Notification")},
-		"Subject": {subject},
-	})
-
-	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return fmt.Errorf("failed to send subscriber notification: %w", err)
-	}
-
-	return nil
-}
-
-func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question string) error {
-	var (
-		m    = gomail.NewMessage()
-		body = fmt.Sprintf("%s (%s) has asked the following question:\n\n%s", userName, userEmail, question)
-	)
-
-	m.SetBody("text/plain", body)
-	m.SetHeaders(map[string][]string{
-		"From":     {m.FormatAddress(eu.Username, "Wedding Guest Questions")},
-		"To":       {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"Reply-To": {m.FormatAddress(userEmail, userName)},
-		"Subject":  {fmt.Sprintf("[Guest Question] %s has asked a question", userName)},
-	})
-
-	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return fmt.Errorf("failed to send question notification: %w", err)
-	}
-
-	return nil
-}
-
-func (eu *EmailUser) SendRSVPNotification(rsvp RSVP) error {
-	rehearsalSubject := ""
-	rehearsalBody := "!"
-
-	if rsvp.Rehearsal {
-		rehearsalSubject = "Rehearsal "
-		rehearsalBody = " to the rehearsal dinner!"
-	}
-
-	m := gomail.NewMessage()
-	subject := fmt.Sprintf("[%sRSVP] %s has RSVP-ed!", rehearsalSubject, rsvp.Name)
-	body := fmt.Sprintf(
-		"%s has RSVP-ed%s\n\nEmail:\n%s\n\nGuests:\n%s\n\nAttending:\n%t\n\nMessage:\n%s",
-		rsvp.Name,
-		rehearsalBody,
-		rsvp.Email,
-		strings.Join(rsvp.Guests, ", "),
-		rsvp.Attending,
-		rsvp.Message,
-	)
-
-	m.SetBody("text/plain", body)
-	m.SetHeaders(map[string][]string{
-		"From":    {m.FormatAddress(eu.Username, "Wedding RSVP's")},
-		"To":      {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"Subject": {subject},
-	})
-
-	if err := eu.Dialer.DialAndSend(m); err != nil {
-		return fmt.Errorf("failed to send RSVP notification: %w", err)
-	}
-
-	return nil
 }
 
 func (eu *EmailUser) GetGomailMessage(message Message) (*gomail.Message, error) {
@@ -153,6 +69,46 @@ func (eu *EmailUser) SendHermesMessage(message Message) error {
 	return nil
 }
 
+func (eu *EmailUser) SendSubscriberNotification(user string, isSubscribing bool) error {
+	var (
+		subject = fmt.Sprintf("[Wedding Details][Unsubscribe] %s has unsubscribed", user)
+		body    = fmt.Sprintf("%s has unsubscribed from updates about wedding details.", user)
+	)
+
+	if isSubscribing {
+		subject = fmt.Sprintf("[Wedding Details] %s has subscribed", user)
+		body = fmt.Sprintf("%s has subscribed to receive updates about wedding details.", user)
+	}
+
+	return eu.sendNotification(subject, body, "Subscriber Notifications", nil)
+}
+
+func (eu *EmailUser) SendQuestionNotification(sender *mail.Address, question string) error {
+	return eu.sendNotification(
+		fmt.Sprintf("[Guest Question] %s has asked a question", sender.Name),
+		fmt.Sprintf("%s (%s) has asked the following question:\n\n%s", sender.Name, sender.Address, question),
+		"Guest Questions",
+		map[string]string{"Reply-To": sender.Address},
+	)
+}
+
+func (eu *EmailUser) SendRSVPNotification(rsvp RSVP) error {
+	return eu.sendNotification(
+		fmt.Sprintf("[RSVP] %s has RSVP-ed to the %s", rsvp.Name, rsvp.Event),
+		fmt.Sprintf(
+			"%s has RSVP-ed to the %s!\n\nAttending:\n%s\n\nEmail:\n%s\n\nGuests:\n%s\n\nMessage:\n%s",
+			rsvp.Name,
+			rsvp.Event,
+			rsvp.AttendingText(),
+			rsvp.Email,
+			strings.Join(rsvp.Guests, ", "),
+			rsvp.Message,
+		),
+		"Wedding RSVP's",
+		nil,
+	)
+}
+
 func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]string, communication string) error {
 	sender, err := eu.Dialer.Dial()
 	if err != nil {
@@ -180,4 +136,36 @@ func (eu *EmailUser) SendSubscriberCommunication(subscriberList map[string]strin
 	log.Printf("Successfully sent messages to %d of %d subscribers", successfulSends, len(subscriberList))
 
 	return nil
+}
+
+func (eu EmailUser) sendNotification(subject, body, fromName string, extraHeaders map[string]string) error {
+	msg := gomail.NewMessage()
+	headers := map[string][]string{
+		"From":    {msg.FormatAddress(eu.Username, fromName)},
+		"To":      {msg.FormatAddress(eu.Username, "RhiPhil Wedding")},
+		"Subject": {subject},
+	}
+
+	if extraHeaders != nil {
+		headers = merge(headers, extraHeaders)
+	}
+
+	msg.SetBody("text/plain", body)
+	msg.SetHeaders(headers)
+
+	if err := eu.Dialer.DialAndSend(msg); err != nil {
+		return fmt.Errorf("Failed to send notification email with subject '%s': %w", subject, err)
+	}
+
+	return nil
+}
+
+func merge(target map[string][]string, maps ...map[string]string) map[string][]string {
+	for _, m := range maps {
+		for k, v := range m {
+			target[k] = append(target[k], v)
+		}
+	}
+
+	return target
 }
