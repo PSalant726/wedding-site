@@ -10,11 +10,11 @@
         <header class="special container">
           <span class="icon solid fa-drafting-compass"></span>
           <h2>Rehearsal <strong>Events</strong></h2>
-          <p>We want to get things right the first time.</p>
+          <p>Because we want to get things right the first time.</p>
           <p />
           <footer>
             <ul class="buttons stacked">
-              <li><a href="#rehearsal-rsvp" class="button primary scrolly">RSVP</a></li>
+              <li><a href="#rehearsal-rsvp" class="button primary scrolly">Rehearsal RSVP</a></li>
             </ul>
           </footer>
         </header>
@@ -39,7 +39,13 @@
                   <p>
                     We'll be rehearsing our wedding ceremony on the Grand Hotel's sun deck.
                     If you're in the wedding party, officiating the ceremony, or have
-                    otherwise been asked to participate, please do your best to attend.
+                    otherwise been asked to participate, please make sure to attend.
+                  </p>
+                  <p>
+                    We expect that there will be plenty of time between the ceremony rehearsal
+                    and the rehearsal dinner for anyone who needs to get checked into their
+                    hotel, spend some time getting ready for dinner, or wants to grab a drink
+                    at the hotel bar.
                   </p>
                   <footer>
                     <ul class="buttons">
@@ -66,9 +72,14 @@
                     <a href="tel:6098845404">(609) 884 - 5404</a><br />
                   </p>
                   <p>
-                    Friday, June 4<sup>th</sup> at 6:30 PM. Vintage is only about a 20 minute walk from the Grand Hotel.
+                    Friday, June 4<sup>th</sup> at 6:30 PM.
                   </p>
-
+                  <p>
+                    Vintage is only about a 5 minute drive or 20 minute walk from the Grand Hotel,
+                    and there is parking available on-site. The restaurant is BYOB, but we'll be
+                    providing beer, wine and spirits. Children and plus-one's are welcome to attend
+                    the rehearsal dinner.
+                  </p>
                   <footer>
                     <ul class="buttons">
                       <li>
@@ -96,8 +107,12 @@
 
         <section class="wrapper style4 special container medium">
           <p>
-            This is separate from your ceremony/reception RSVP, so please be sure to RSVP there
-            as well. The same instructions apply to both:
+            <strong>
+              This is separate from your
+              <a href="{{ .Links.rsvp }}">ceremony & reception RSVP</a>,
+              so please be sure to RSVP there as well.
+            </strong>
+            The same instructions apply to both:
           </p>
           <p>
             Please enter your first name, last name, and zip code exactly as they appeared on your
@@ -111,42 +126,75 @@
             <form id="rehearsal-rsvp-form" action="#">
               <div class="row gtr-50">
                 <div class="col-12">
-                  <input type="text" name="name" title="Please enter your first and last name." pattern=".*\s.*"
-                    placeholder="Full Name" oninvalid="this.setCustomValidity('Please enter your first and last name.')"
-                    oninput="this.setCustomValidity('')" required />
-                </div>
-                <div class="col-6 col-12-mobile">
-                  <input type="email" name="email" title="Please enter your email address." placeholder="Email"
-                    oninvalid="this.setCustomValidity('Please enter an email address.')" oninput="this.setCustomValidity('')"
+                  <input
+                    type="text"
+                    name="name"
+                    title="Please enter your first and last name."
+                    pattern=".*\s.*"
+                    placeholder="Full Name"
+                    oninvalid="this.setCustomValidity('Please enter your first and last name.')"
+                    oninput="this.setCustomValidity('')"
                     required />
                 </div>
                 <div class="col-6 col-12-mobile">
-                  <input type="text" name="zip"
+                  <input
+                    type="email"
+                    name="email"
+                    title="Please enter your email address."
+                    placeholder="Email"
+                    oninvalid="this.setCustomValidity('Please enter an email address.')"
+                    oninput="this.setCustomValidity('')"
+                    required />
+                </div>
+                <div class="col-6 col-12-mobile">
+                  <input
+                    type="text"
+                    name="zip"
                     title="For verification, please enter the zip code to which your invitation was sent."
-                    placeholder="Invitation Zip Code" minlength="5" maxlength="5" pattern="\d{5}"
+                    placeholder="Invitation Zip Code"
+                    minlength="5"
+                    maxlength="5"
+                    pattern="\d{5}"
                     oninvalid="this.setCustomValidity('For verification, please enter the zip code to which your invitation was sent.')"
-                    oninput="this.setCustomValidity('')" required />
+                    oninput="this.setCustomValidity('')"
+                    required />
                 </div>
                 <div class="col-12">
-                  <input type="text" name="guests" placeholder="Guest(s)"
+                  <input
+                    type="text"
+                    name="guests"
+                    placeholder="Guest(s)"
                     title="Please list the guests you plan to bring with you. If including more than one guest, this must be a comma-separated list of their full names exactly as they appear on your invitation."
-                    pattern="[\w\s.-]+(,[\w\s.-]+)*" oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you. '
-                          + 'If including more than one guest, this must be a comma-separated list of their full '
-                          + 'names exactly as they appear on your invitation.')" oninput="this.setCustomValidity('')" />
+                    pattern="[\w\s.-]+(,[\w\s.-]+)*"
+                    oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you. '
+                      + 'If including more than one guest, this must be a comma-separated list of their full '
+                      + 'names exactly as they appear on your invitation.')" oninput="this.setCustomValidity('')" />
                 </div>
                 <div class="col-12">
-                  <textarea name="message"
-                    placeholder="Food allergies? Dietary restrictions? Just want to say hi? Add a personal note..." rows="3"
-                    maxlength="500"></textarea>
+                  <textarea
+                    name="message"
+                    placeholder="Food allergies? Dietary restrictions? Just want to say hi? Add a personal note..."
+                    rows="3"
+                    maxlength="1000">
+                  </textarea>
                 </div>
                 <div class="col-6 col-12-narrower">
-                  <input type="radio" id="attending" name="response"
-                    title="Select this option if you and the specified guest(s) will be attending." value="1" required />
+                  <input
+                    type="radio"
+                    id="attending"
+                    name="response"
+                    title="Select this option if you and the specified guest(s) will be attending."
+                    value="1"
+                    required />
                   <label for="attending">Attending</label>
                 </div>
                 <div class="col-6 col-12-narrower">
-                  <input type="radio" id="not-attending" name="response"
-                    title="Select this option if you will and the specified guest(s) will not be attending." value="2"
+                  <input
+                    type="radio"
+                    id="not-attending"
+                    name="response"
+                    title="Select this option if you will and the specified guest(s) will not be attending."
+                    value="2"
                     required />
                   <label for="not-attending">Not Attending</label>
                 </div>
