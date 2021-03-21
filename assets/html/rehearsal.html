@@ -89,90 +89,84 @@
           </div>
         </section>
 
-              <!-- Content -->
-              <div class="content">
-                <section>
-                  <a href="#" class="image featured"><img src="images/pic02.jpg" alt="" /></a>
-                  <header>
-                    <h3>Dolore Amet Consequat</h3>
-                  </header>
-                  <p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros
-                    ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at consectetur non,
-                    malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum massa. Morbi
-                    eu faucibus massa. Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo,
-                    tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam.</p>
-                  <p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum.
-                    Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum,
-                    et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est
-                    placerat tristique. Sed id sem et massa ornare pellentesque. Maecenas pharetra porta accumsan. </p>
-                  <p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse
-                    euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam
-                    gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus, non hendrerit ipsum arcu tristique est.
-                  </p>
-                </section>
+        <header class="special container" id="rehearsal-rsvp">
+          <span class="icon solid fa-envelope"></span>
+          <h2>Rehearsal <strong>RSVP</strong></h2>
+        </header>
+
+        <section class="wrapper style4 special container medium">
+          <p>
+            This is separate from your ceremony/reception RSVP, so please be sure to RSVP there
+            as well. The same instructions apply to both:
+          </p>
+          <p>
+            Please enter your first name, last name, and zip code exactly as they appeared on your
+            invitation's envelope. If you're responding for yourself and one or more guests (or
+            your family), please include their name(s) in the field labeled "Guest(s)", and separate
+            them with commas. Otherwise, you may leave that field blank. If necessary, you may
+            reuse this form later to change your response.
+          </p>
+
+          <div class="content">
+            <form id="rehearsal-rsvp-form" action="#">
+              <div class="row gtr-50">
+                <div class="col-12">
+                  <input type="text" name="name" title="Please enter your first and last name." pattern=".*\s.*"
+                    placeholder="Full Name" oninvalid="this.setCustomValidity('Please enter your first and last name.')"
+                    oninput="this.setCustomValidity('')" required />
+                </div>
+                <div class="col-6 col-12-mobile">
+                  <input type="email" name="email" title="Please enter your email address." placeholder="Email"
+                    oninvalid="this.setCustomValidity('Please enter an email address.')" oninput="this.setCustomValidity('')"
+                    required />
+                </div>
+                <div class="col-6 col-12-mobile">
+                  <input type="text" name="zip"
+                    title="For verification, please enter the zip code to which your invitation was sent."
+                    placeholder="Invitation Zip Code" minlength="5" maxlength="5" pattern="\d{5}"
+                    oninvalid="this.setCustomValidity('For verification, please enter the zip code to which your invitation was sent.')"
+                    oninput="this.setCustomValidity('')" required />
+                </div>
+                <div class="col-12">
+                  <input type="text" name="guests" placeholder="Guest(s)"
+                    title="Please list the guests you plan to bring with you. If including more than one guest, this must be a comma-separated list of their full names exactly as they appear on your invitation."
+                    pattern="[\w\s.-]+(,[\w\s.-]+)*" oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you. '
+                          + 'If including more than one guest, this must be a comma-separated list of their full '
+                          + 'names exactly as they appear on your invitation.')" oninput="this.setCustomValidity('')" />
+                </div>
+                <div class="col-12">
+                  <textarea name="message"
+                    placeholder="Food allergies? Dietary restrictions? Just want to say hi? Add a personal note..." rows="3"
+                    maxlength="500"></textarea>
+                </div>
+                <div class="col-6 col-12-narrower">
+                  <input type="radio" id="attending" name="response"
+                    title="Select this option if you and the specified guest(s) will be attending." value="1" required />
+                  <label for="attending">Attending</label>
+                </div>
+                <div class="col-6 col-12-narrower">
+                  <input type="radio" id="not-attending" name="response"
+                    title="Select this option if you will and the specified guest(s) will not be attending." value="2"
+                    required />
+                  <label for="not-attending">Not Attending</label>
+                </div>
+                <p />
+                <div class="col-12">
+                  <ul class="buttons">
+                    <li><input type="submit" class="special primary" value="Submit Rehearsal RSVP" /></li>
+                  </ul>
+                </div>
+                <div class="message-container col-12">
+                  <span class="message">Placeholder</span>
+                </div>
               </div>
-
-            </div>
+            </form>
           </div>
-        </section>
 
-        <!-- Two -->
-        <section class="wrapper style1 container special">
-          <div class="row">
-            <div class="col-4 col-12-narrower">
-
-              <section>
-                <header>
-                  <h3>This is Something</h3>
-                </header>
-                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin
-                  a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-                <footer>
-                  <ul class="buttons">
-                    <li><a href="#" class="button small">Learn More</a></li>
-                  </ul>
-                </footer>
-              </section>
-
-            </div>
-            <div class="col-4 col-12-narrower">
-
-              <section>
-                <header>
-                  <h3>Also Something</h3>
-                </header>
-                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin
-                  a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-                <footer>
-                  <ul class="buttons">
-                    <li><a href="#" class="button small">Learn More</a></li>
-                  </ul>
-                </footer>
-              </section>
-
-            </div>
-            <div class="col-4 col-12-narrower">
-
-              <section>
-                <header>
-                  <h3>Probably Something</h3>
-                </header>
-                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin
-                  a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-                <footer>
-                  <ul class="buttons">
-                    <li><a href="#" class="button small">Learn More</a></li>
-                  </ul>
-                </footer>
-              </section>
-
-            </div>
-          </div>
+          <script src="{{ .Assets.js }}form.js"></script>
         </section>
       </article>
     </div>
-
-    {{ template "subscribe" . }}
 
     {{ template "footer" . }}
   </body>

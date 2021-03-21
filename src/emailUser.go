@@ -86,23 +86,31 @@ func (eu *EmailUser) SendQuestionNotification(userName, userEmail, question stri
 }
 
 func (eu *EmailUser) SendRSVPNotification(rsvp RSVP) error {
-	var (
-		m    = gomail.NewMessage()
-		body = fmt.Sprintf(
-			"%s has RSVP-ed!\n\nEmail:\n%s\n\nGuests:\n%s\n\nAttending:\n%t\n\nMessage:\n%s",
-			rsvp.Name,
-			rsvp.Email,
-			strings.Join(rsvp.Guests, ", "),
-			rsvp.Attending,
-			rsvp.Message,
-		)
+	rehearsalSubject := ""
+	rehearsalBody := "!"
+
+	if rsvp.Rehearsal {
+		rehearsalSubject = "Rehearsal "
+		rehearsalBody = " to the rehearsal dinner!"
+	}
+
+	m := gomail.NewMessage()
+	subject := fmt.Sprintf("[%sRSVP] %s has RSVP-ed!", rehearsalSubject, rsvp.Name)
+	body := fmt.Sprintf(
+		"%s has RSVP-ed%s\n\nEmail:\n%s\n\nGuests:\n%s\n\nAttending:\n%t\n\nMessage:\n%s",
+		rsvp.Name,
+		rehearsalBody,
+		rsvp.Email,
+		strings.Join(rsvp.Guests, ", "),
+		rsvp.Attending,
+		rsvp.Message,
 	)
 
 	m.SetBody("text/plain", body)
 	m.SetHeaders(map[string][]string{
 		"From":    {m.FormatAddress(eu.Username, "Wedding RSVP's")},
 		"To":      {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"Subject": {fmt.Sprintf("[RSVP] %s has RSVP-ed!", rsvp.Name)},
+		"Subject": {subject},
 	})
 
 	if err := eu.Dialer.DialAndSend(m); err != nil {

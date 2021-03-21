@@ -136,7 +136,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if r.Method == http.MethodGet {
-		subscriber = r.URL.Query()["address"][0]
+		subscriber = r.URL.Query().Get("address")
 		redirect = true
 	} else {
 		subscriber = r.FormValue("email")
@@ -165,7 +165,7 @@ func subscribeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
-	address := r.URL.Query()["address"][0]
+	address := r.URL.Query().Get("address")
 
 	if err := emailSender.SendSubscriberNotification(address, false); err != nil {
 		http.Error(w, "Failed to unsubscribe address: "+address, http.StatusInternalServerError)
@@ -214,7 +214,9 @@ func rsvpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rsvp := NewRSVP(r.Form)
+	isRehearsal := r.URL.Query().Get("rehearsal") == "true"
+	rsvp := NewRSVP(r.Form, isRehearsal)
+
 	if err := rsvp.Validate(); err != nil {
 		http.Error(w, fmt.Sprintf("Failed to RSVP: %s", err), http.StatusForbidden)
 		log.Printf("Validation failed for RSVP: %+v. Error: %s", rsvp, err)

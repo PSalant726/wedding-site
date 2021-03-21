@@ -134,6 +134,10 @@ func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
 		message = "None"
 	}
 
+	if rsvp.Rehearsal {
+		return NewRehearsalRSVPConfirmationMessage(rsvp, guests, message)
+	}
+
 	msg := &Message{
 		Recipient: rsvp.Email,
 		Subject:   "Thanks for your RSVP!",
@@ -201,6 +205,75 @@ func NewRSVPConfirmationMessage(rsvp RSVP) *Message {
 				},
 			},
 		)
+	}
+
+	msg.Body.Body.Intros = append(msg.Body.Body.Intros, detail, "Here's how you replied:")
+	msg.Body.Body.Table.Data[len(msg.Body.Body.Table.Data)-1] = append(
+		msg.Body.Body.Table.Data[len(msg.Body.Body.Table.Data)-1], isAttending,
+	)
+
+	return msg
+}
+
+func NewRehearsalRSVPConfirmationMessage(rsvp RSVP, guests, message string) *Message {
+	msg := &Message{
+		Recipient: rsvp.Email,
+		Subject:   "Thanks for your RSVP to our Rehearsal Dinner!",
+		Body: hermes.Email{
+			Body: hermes.Body{
+				Name:   strings.Split(rsvp.Name, " ")[0],
+				Intros: []string{"This email confirms that we've received your RSVP to our rehearsal dinner, thanks!"},
+				Table: hermes.Table{
+					Data: [][]hermes.Entry{
+						{
+							{Key: "Field", Value: "Name"},
+							{Key: "Your Reply:", Value: rsvp.Name},
+						},
+						{
+							{Key: "Field", Value: "Guests"},
+							{Key: "Your Reply:", Value: guests},
+						},
+						{
+							{Key: "Field", Value: "Message"},
+							{Key: "Your Reply:", Value: message},
+						},
+						{{Key: "Field", Value: "Attending"}},
+					},
+					Columns: hermes.Columns{
+						CustomWidth: map[string]string{"Field": "25%"},
+					},
+				},
+				Actions: []hermes.Action{
+					{
+						Instructions: "Need to change your response? You can do that any time through April 30th by clicking here:",
+						Button: hermes.Button{
+							Color: "#83D3C9",
+							Link:  "https://www.rhiphilwedding.com/rehearsal",
+							Text:  "Change your RSVP",
+						},
+					},
+				},
+				Signature: "Sincerely",
+			},
+		},
+	}
+
+	detail := "We're sorry to hear you won't be able to make it, " +
+		"but we hope you'll still be able to attend the wedding. " +
+		"If things change, and it turns out you can be there, " +
+		"you can change your response any time through April 30th using the link below."
+	isAttending := hermes.Entry{Key: "Your Reply:", Value: "No"}
+
+	if rsvp.Attending {
+		detail = "We're glad to hear you can make it! " +
+			"If you haven't also RSVP-ed to the ceremony and reception, " +
+			"please be sure to do so by April 30th. Otherwise, " +
+			"there's nothing more you need to do. " +
+			"We appreciate you taking the time to make sure " +
+			"everything goes well on our special day."
+
+		isAttending = hermes.Entry{Key: "Your Reply:", Value: "Yes!"}
+		msg.Body.Body.Outros = []string{"We're looking forward to seeing you there!"}
 	}
 
 	msg.Body.Body.Intros = append(msg.Body.Body.Intros, detail, "Here's how you replied:")

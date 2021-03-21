@@ -27,6 +27,7 @@ type RSVP struct {
 	Guests    []string
 	Message   string
 	Attending bool
+	Rehearsal bool
 }
 
 type guest struct {
@@ -41,13 +42,14 @@ type guest struct {
 	}
 }
 
-func NewRSVP(response url.Values) RSVP {
+func NewRSVP(response url.Values, isRehearsal bool) RSVP {
 	rsvp := &RSVP{
 		Name:      strings.TrimSpace(strings.Title(template.HTMLEscapeString(response.Get("name")))),
 		Zip:       strings.TrimSpace(template.HTMLEscapeString(response.Get("zip"))),
 		Guests:    parseGuests(template.HTMLEscapeString(response.Get("guests"))),
 		Message:   strings.TrimSpace(template.HTMLEscapeString(response.Get("message"))),
 		Attending: response.Get("response") == "1",
+		Rehearsal: isRehearsal,
 	}
 
 	email, err := mail.ParseAddress(template.HTMLEscapeString(response.Get("email")))
@@ -59,12 +61,22 @@ func NewRSVP(response url.Values) RSVP {
 }
 
 func (r RSVP) Validate() error {
+	rehearsalFilter := ")"
+	if r.Rehearsal {
+		rehearsalFilter = ", NOT({Rehearsal Dinner RSVP} = 'Not Invited'))"
+	}
+
 	var (
 		responders = make([]guest, 0)
 		listParams = airtable.ListParameters{
-			Fields:          []string{"Guest", "ZIP"},
-			FilterByFormula: fmt.Sprintf("AND(LOWER({Guest}) = '%s', {ZIP} = '%s')", strings.ToLower(r.Name), r.Zip),
-			MaxRecords:      5,
+			Fields: []string{"Guest", "ZIP"},
+			FilterByFormula: fmt.Sprintf(
+				"AND(LOWER({Guest}) = '%s', {ZIP} = '%s'%s",
+				strings.ToLower(r.Name),
+				r.Zip,
+				rehearsalFilter,
+			),
+			MaxRecords: 5,
 		}
 	)
 
