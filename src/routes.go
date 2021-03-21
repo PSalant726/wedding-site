@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/mail"
 	"os"
 	"strings"
 	"text/template"
@@ -185,20 +186,23 @@ func unsubscribeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func questionHandler(w http.ResponseWriter, r *http.Request) {
-	var (
-		senderName  = r.FormValue("name")
-		senderEmail = r.FormValue("email")
-		question    = r.FormValue("question")
-	)
+	sender, err := mail.ParseAddress(fmt.Sprintf("%s <%s>", r.FormValue("name"), r.FormValue("email")))
+	if err != nil {
+		http.Error(w, "Something went wrong. Please try again.", http.StatusInternalServerError)
+		log.Println("Failed to parse address from input: %w", err)
 
-	if err := emailSender.SendQuestionNotification(senderName, senderEmail, question); err != nil {
+		return
+	}
+
+	question := r.FormValue("question")
+	if err := emailSender.SendQuestionNotification(sender, question); err != nil {
 		http.Error(w, "Failed to notify Phil & Rhiannon about your question. Please try again.", http.StatusInternalServerError)
 		log.Println(err)
 
 		return
 	}
 
-	msg := *NewQuestionReceivedMessage(senderName, senderEmail, question)
+	msg := *NewQuestionReceivedMessage(sender, question)
 	if err := emailSender.SendHermesMessage(msg); err != nil {
 		http.Error(w, "Failed to confirm receipt of your question. Please try again.", http.StatusInternalServerError)
 		log.Println(err)
@@ -214,9 +218,7 @@ func rsvpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isRehearsal := r.URL.Query().Get("rehearsal") == "true"
-	rsvp := NewRSVP(r.Form, isRehearsal)
-
+	rsvp := NewRSVP(r.Form, r.URL.Query().Get("rehearsal"))
 	if err := rsvp.Validate(); err != nil {
 		http.Error(w, fmt.Sprintf("Failed to RSVP: %s", err), http.StatusForbidden)
 		log.Printf("Validation failed for RSVP: %+v. Error: %s", rsvp, err)
