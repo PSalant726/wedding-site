@@ -3,6 +3,74 @@
 {{ template "head" . }}
 <body>
   {{ template "nav" . }}
+
+  <article id="main">
+
+    <header class="special container">
+      <span class="icon solid fa-clipboard-list"></span>
+      <h2>Event <strong>Schedule</strong></h2>
+      <p>Information on all wedding-related events.</p>
+    </header>
+
+    <section class="wrapper style4 container">
+      <div class="content">
+        <section>
+          <a class="image featured"><img src="{{ .Assets.images }}florist.png" alt="" /></a>
+          <header>
+            <h3>Wedding Ceremony</h3>
+          </header>
+          <p>
+            Saturday, June 5, 2021 at 4 PM, at the Grand Hotel of Cape May
+          </p>
+          <p>
+            Please arrive promptly by 4 PM at the Grand Hotel's sun deck for our wedding ceremony.
+            If the weather doesn't cooperate, we'll be sure to let you know about the arrangements
+            for an indoor ceremony.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section class="wrapper style4 container">
+      <div class="content">
+        <section>
+          <a class="image featured"><img src="{{ .Assets.images }}grand_hotel.png" alt="" /></a>
+          <header>
+            <h3>Cocktail Hour & Reception</h3>
+          </header>
+          <p>
+            Saturday, June 5, 2021 at 5 PM, at the Grand Hotel of Cape May
+          </p>
+          <p>
+            Immediately following the ceremony, in the Grand Hotel's atrium and lower ballroom.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section class="wrapper style4 container">
+      <div class="content">
+        <section>
+          <a class="image featured"><img src="{{ .Assets.images }}hemmingways.png" alt="" /></a>
+          <header>
+            <h3>Brunch</h3>
+          </header>
+          <p>
+            Sunday, June 6, 2021 at 10 AM, at Hemmingway's Restaurant
+          </p>
+          <p>
+            Hemmingway's is located within the Grand Hotel, and is accessible directly via the hotel
+            lobby. A favorite, casual eatery for visitors and locals alike, this Cape May restaurant
+            features a modern American cuisine with a variety of delectable culinary creations including
+            their famous mouth-watering steaks, fresh locally sourced seafood, and so much more!
+            Hemingway’s offers dine-in and take out options to everyone, and room delivery exclusively to
+            guests of The Grand Hotel.
+          </p>
+        </section>
+      </div>
+    </section>
+  </article>
+
   {{ template "footer" . }}
 </body>
 </html>

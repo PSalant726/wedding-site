@@ -115,11 +115,11 @@
             The same instructions apply to both:
           </p>
           <p>
-            Please enter your first name, last name, and zip code exactly as they appeared on your
-            invitation's envelope. If you're responding for yourself and one or more guests (or
-            your family), please include their name(s) in the field labeled "Guest(s)", and separate
-            them with commas. Otherwise, you may leave that field blank. If necessary, you may
-            reuse this form later to change your response.
+            Please enter your first name, last name, and zip code exactly as they appear on your
+            invitation's envelope. If you're responding for yourself and one or more guests,
+            please include their name(s) in the field labeled "Additional Invited Guest(s)",
+            and separate them with commas. Otherwise, you may leave that field blank.
+            If necessary, you may reuse this form later to change your response.
           </p>
 
           <div class="content">
@@ -163,7 +163,7 @@
                   <input
                     type="text"
                     name="guests"
-                    placeholder="Guest(s)"
+                    placeholder="Additional Invited Guest(s)"
                     title="Please list the guests you plan to bring with you. If including more than one guest, this must be a comma-separated list of their full names exactly as they appear on your invitation."
                     pattern="[\w\s.-]+(,[\w\s.-]+)*"
                     oninvalid="this.setCustomValidity('Please list the guests you plan to bring with you. '
@@ -171,12 +171,7 @@
                       + 'names exactly as they appear on your invitation.')" oninput="this.setCustomValidity('')" />
                 </div>
                 <div class="col-12">
-                  <textarea
-                    name="message"
-                    placeholder="Food allergies? Dietary restrictions? Just want to say hi? Add a personal note..."
-                    rows="3"
-                    maxlength="1000">
-                  </textarea>
+                  <textarea name="message" placeholder="Allergies? Dietary restrictions? Just want to say hi? Add a personal note..." rows="3" maxlength="1000"></textarea>
                 </div>
                 <div class="col-6 col-12-narrower">
                   <input
@@ -198,8 +193,11 @@
                     required />
                   <label for="not-attending">Not Attending</label>
                 </div>
-                <p />
                 <div class="col-12">
+                  <p>
+                    You will receive a confirmation email at the email address you provide. To ensure delivery,
+                    please add no-reply@rhiphilwedding.com to your address book, and be sure to check your spam folder.
+                  </p>
                   <ul class="buttons">
                     <li><input type="submit" class="special primary" value="Submit Rehearsal RSVP" /></li>
                   </ul>

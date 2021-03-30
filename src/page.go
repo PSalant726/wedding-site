@@ -19,14 +19,14 @@ func NewPage(path string) *Page {
 			"js":     RelativePathAssets + "js/",
 		},
 		Links: map[string]string{
-			"faq":       PathFAQ,
-			"home":      PathHome,
-			"people":    PathPeople,
-			"registry":  PathRegistry,
-			"rsvp":      PathRSVP,
-			"schedule":  PathSchedule,
-			"subscribe": PathSubscribe,
-			"travel":    PathTravel,
+			"faq":        PathFAQ,
+			"home":       PathHome,
+			"people":     PathPeople,
+			"registries": PathRegistries,
+			"rsvp":       PathRSVP,
+			"schedule":   PathSchedule,
+			"subscribe":  PathSubscribe,
+			"travel":     PathTravel,
 		},
 	}
 }

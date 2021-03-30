@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/mail"
+	"net/url"
 	"strings"
 
 	"github.com/matcornic/hermes/v2"
@@ -48,9 +49,11 @@ func (eu *EmailUser) GetGomailMessage(message Message) (*gomail.Message, error) 
 	m.SetBody("text/plain", plainText)
 	m.AddAlternative("text/html", html)
 	m.SetHeaders(map[string][]string{
-		"From":    {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
-		"To":      {m.FormatAddress(message.Recipient, "")},
-		"Subject": {message.Subject},
+		"From":                  {m.FormatAddress(eu.Username, "RhiPhil Wedding")},
+		"To":                    {m.FormatAddress(message.Recipient, "")},
+		"Subject":               {message.Subject},
+		"List-Unsubscribe-Post": {"List-Unsubscribe=One-Click"},
+		"List-Unsubscribe":      {fmt.Sprintf("https://rhiphilwedding.com/unsubscribe?address=%s", url.QueryEscape(message.Recipient))},
 	})
 
 	return m, nil

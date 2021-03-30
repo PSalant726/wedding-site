@@ -24,7 +24,8 @@ func NewSubscriberThankYouMessage(recipient string) *Message {
 				Title: "Thanks for subscribing to updates about our wedding!",
 				Intros: []string{
 					"We're excited to continue planning, and we'll let you know as soon as we have more details to share. " +
-						"In the meantime, join the conversation on social media with #rhiphil !",
+						"In the meantime, please add no-reply@rhiphilwedding.com to your address book, " +
+						"and join the conversation on social media with #rhiphil !",
 				},
 				Actions: []hermes.Action{
 					{
@@ -63,8 +64,9 @@ func NewSubscriberCommunicationMessage(name, recipient, messageText string) *Mes
 						},
 					},
 					{
-						Instructions: "You are receiving this message because you previously subscribed to receive updates " +
-							"about our wedding. To unsubscribe, please click here:",
+						Instructions: "You are receiving this message because you previously subscribed to receive updates about our wedding. " +
+							"To ensure continued delivery, please add no-reply@rhiphilwedding.com to your address book. " +
+							"To unsubscribe, click here:",
 						Button: hermes.Button{
 							Color: "#331929",
 							Link:  "https://www.rhiphilwedding.com/unsubscribe?address=" + url.QueryEscape(recipient),
@@ -113,7 +115,8 @@ func NewQuestionReceivedMessage(sender *mail.Address, question string) *Message 
 				Intros: []string{
 					"Thanks for sending us your question!",
 					"We probably haven't seen it yet, but we're sure it was a good one. " +
-						"Keep an eye on your inbox for an answer; we'll get back to you as soon as we can.",
+						"Keep an eye on your inbox for an answer; we'll get back to you as soon as we can. " +
+						"To ensure delivery of your answer, please add no-reply@rhiphilwedding.com to your address book.",
 				},
 				Dictionary: []hermes.Entry{
 					{Key: "You Asked", Value: question},

@@ -2645,7 +2645,7 @@ input, select, textarea {
 		background-color: #645862;
 		background-image: url("images/light-bl.svg"), url("images/light-br.svg"), url("images/overlay.png"), url("../images/boardwalk.png");
 		background-position: bottom left, bottom right, top left, 50% 0%;
-		background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+		background-repeat: no-repeat, no-repeat, repeat, repeat;
 		background-size: 25em, 25em, auto, auto;
 		color: #fff;
 		cursor: default;
