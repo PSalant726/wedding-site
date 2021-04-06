@@ -105,7 +105,7 @@ func (eu *EmailUser) SendRSVPNotification(rsvp RSVP) error {
 			rsvp.AttendingText(),
 			rsvp.Email,
 			strings.Join(rsvp.Guests, ", "),
-			rsvp.Message,
+			rsvp.DecodedMessage(),
 		),
 		"Wedding RSVP's",
 		nil,
