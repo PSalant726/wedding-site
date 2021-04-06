@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"html/template"
 	"log"
 	"net/mail"
@@ -135,7 +136,7 @@ func (r RSVP) ConfirmationTable() hermes.Table {
 		guests = "None"
 	}
 
-	message := r.Message
+	message := r.DecodedMessage()
 	if r.Message == "" {
 		message = "None"
 	}
@@ -163,6 +164,10 @@ func (r RSVP) ConfirmationTable() hermes.Table {
 			CustomWidth: map[string]string{"Field": "25%"},
 		},
 	}
+}
+
+func (r RSVP) DecodedMessage() string {
+	return strings.TrimSpace(html.UnescapeString(r.Message))
 }
 
 func (r RSVP) Validate() error {
