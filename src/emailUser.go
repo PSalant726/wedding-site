@@ -5,10 +5,11 @@ import (
 	"log"
 	"net/mail"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/matcornic/hermes/v2"
-	"gopkg.in/gomail.v2"
+	gomail "gopkg.in/mail.v2"
 )
 
 type EmailUser struct {
@@ -19,10 +20,17 @@ type EmailUser struct {
 }
 
 func NewGmailUser(username, password string) *EmailUser {
+	dialer := gomail.NewDialer("smtp.gmail.com", 587, username, password)
+	if host, err := os.Hostname(); err == nil {
+		dialer.LocalName = host
+	}
+
+	dialer.StartTLSPolicy = gomail.MandatoryStartTLS
+
 	return &EmailUser{
 		Username: username,
 		Password: password,
-		Dialer:   gomail.NewDialer("smtp.gmail.com", 587, username, password),
+		Dialer:   dialer,
 		Hermes: hermes.Hermes{
 			DisableCSSInlining: false,
 			Product: hermes.Product{
