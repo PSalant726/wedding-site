@@ -27,6 +27,7 @@ const (
 	PathSchedule    = "/schedule"
 	PathSubscribe   = "/subscribe"
 	PathTravel      = "/travel"
+	PathThankYou    = "/thank-you"
 	PathUnsubscribe = "/unsubscribe"
 
 	RelativePathAssets = "assets/"
@@ -54,7 +55,8 @@ func NewRouterWithRoutes() *mux.Router {
 	// GET requests
 	get.Use(logRequest)
 	get.HandleFunc(PathComm, makeHandler(PathComm))
-	get.HandleFunc(PathHome, makeHandler(PathAbout))
+	get.HandleFunc(PathHome, staticHandler("thank-you.html"))
+	get.HandleFunc(PathAbout, makeHandler(PathAbout))
 	get.HandleFunc(PathPeople, makeHandler(PathPeople))
 	get.HandleFunc(PathFAQ, makeHandler(PathFAQ))
 	get.HandleFunc(PathRegistries, makeHandler(PathRegistries))
@@ -62,7 +64,8 @@ func NewRouterWithRoutes() *mux.Router {
 	get.HandleFunc(PathRSVP, makeHandler(PathRSVP))
 	get.HandleFunc(PathSchedule, makeHandler(PathSchedule))
 	get.HandleFunc(PathTravel, makeHandler(PathTravel))
-	get.HandleFunc(PathPreview, previewHandler)
+	get.HandleFunc(PathPreview, staticHandler("preview.html"))
+	get.HandleFunc(PathThankYou, staticHandler("thank-you.html"))
 
 	// GET requests with ?address=...
 	getq.Use(logRequest)
@@ -100,10 +103,12 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) error {
 	return nil
 }
 
-func previewHandler(w http.ResponseWriter, _ *http.Request) {
-	if err := templates.ExecuteTemplate(w, "preview.html", &Page{}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		log.Println(err)
+func staticHandler(htmlTemplate string) http.HandlerFunc {
+	return func(w http.ResponseWriter, _ *http.Request) {
+		if err := templates.ExecuteTemplate(w, htmlTemplate, &Page{}); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+		}
 	}
 }
 
