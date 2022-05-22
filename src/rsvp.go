@@ -14,12 +14,10 @@ import (
 	"github.com/matcornic/hermes/v2"
 )
 
-const shouldRetryIfRateLimited = true
-
 var (
-	airtableAPIKey = os.Getenv("AIRTABLE_API_KEY")
-	airtableBaseID = os.Getenv("AIRTABLE_BASE_ID")
-	airtableClient = airtable.New(airtableAPIKey, airtableBaseID, shouldRetryIfRateLimited)
+	airtableAPIKey    = os.Getenv("AIRTABLE_API_KEY")
+	airtableBaseID    = os.Getenv("AIRTABLE_BASE_ID")
+	airtableClient, _ = airtable.New(airtableAPIKey, airtableBaseID)
 )
 
 type RSVP struct {
@@ -180,6 +178,7 @@ func (r RSVP) Validate() error {
 		}
 	)
 
+	airtableClient.ShouldRetryIfRateLimited = true
 	if err := airtableClient.ListRecords("Guests", &responders, listParams); err != nil {
 		log.Printf("Failed to query Airtable for RSVP: %+v. Error: %s", r, err)
 		return fmt.Errorf("An internal error occurred. Please try again.")
